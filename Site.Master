@@ -53,6 +53,15 @@
                         <li><a runat="server" href="~/">Home</a></li>
                         <li><a runat="server" href="~/About">About</a></li>
                         <li><a runat="server" href="~/Contact">Contact</a></li>
+                        <li><a runat="server" href="~/orders">CRM</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <% if (Request.IsAuthenticated) { %>
+                            <li class="navbar-text">Signed in as <%: Context.User.Identity.Name %></li>
+                            <li><a runat="server" href="~/Logout">Logout</a></li>
+                        <% } else { %>
+                            <li><a runat="server" href="~/Login">Login</a></li>
+                        <% } %>
                     </ul>
                 </div>
             </div>

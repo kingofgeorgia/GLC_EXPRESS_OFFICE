@@ -1,0 +1,16 @@
+using System;
+using System.Web.Security;
+using System.Web.UI;
+
+namespace GLC_EXPRESS
+{
+    public partial class Logout : Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            FormsAuthentication.SignOut();
+            Response.Redirect("~/", false);
+            Context.ApplicationInstance.CompleteRequest();
+        }
+    }
+}

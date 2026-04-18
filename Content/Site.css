@@ -35,3 +35,87 @@ textarea {
     background-color: #777;
     border-color: #fff
 }
+
+.crm-page input,
+.crm-page select,
+.crm-page textarea {
+    max-width: 100%;
+}
+
+.crm-header {
+    margin-bottom: 10px;
+}
+
+.crm-user-banner {
+    margin-bottom: 20px;
+}
+
+.crm-tabs {
+    margin-bottom: 20px;
+}
+
+.crm-tabs > li > a,
+.crm-tabs > li > a:hover,
+.crm-tabs > li > a:focus {
+    color: #333;
+}
+
+.crm-tab-content {
+    padding-bottom: 20px;
+}
+
+.crm-form-panel,
+.crm-list-panel {
+    min-height: 100%;
+}
+
+.crm-form-panel .panel-body,
+.crm-list-panel .panel-body {
+    padding: 20px;
+}
+
+.crm-form-panel .btn {
+    margin-top: 10px;
+}
+
+.crm-form-actions .btn + .btn {
+    margin-top: 10px;
+}
+
+.crm-form-hint {
+    display: block;
+    margin-top: 6px;
+}
+
+.crm-checkbox-list label {
+    font-weight: normal;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.crm-table th {
+    white-space: nowrap;
+    background-color: #f7f7f7;
+}
+
+.crm-table td {
+    vertical-align: middle !important;
+}
+
+.crm-table a {
+    word-break: break-all;
+}
+
+.crm-actions-cell {
+    white-space: nowrap;
+}
+
+.crm-actions-cell .btn + .btn {
+    margin-left: 6px;
+}
+
+@media screen and (max-width: 991px) {
+    .crm-form-panel {
+        margin-bottom: 20px;
+    }
+}
