@@ -361,3 +361,10 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# Local tooling and runtime artifacts
+.local/
+tools/
+nuget.exe
+iisexpress_amd64_en-US.msi
+Uploads/
