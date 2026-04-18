@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Web;
+using System.Linq;
 using GLC_EXPRESS.Models;
-using Newtonsoft.Json;
+using LiteDB;
 
 namespace GLC_EXPRESS.Services
 {
@@ -15,15 +14,19 @@ namespace GLC_EXPRESS.Services
         {
             lock (SyncRoot)
             {
-                EnsureStorage();
+                using (var database = AppDatabase.Open())
+                {
+                    var data = new CrmDataStore
+                    {
+                        Trips = database.GetCollection<TripRecord>("trips").FindAll().ToList(),
+                        Drivers = database.GetCollection<DriverRecord>("drivers").FindAll().ToList(),
+                        FleetVehicles = database.GetCollection<FleetVehicleRecord>("fleet").FindAll().ToList(),
+                        Clients = database.GetCollection<ClientRecord>("clients").FindAll().ToList()
+                    };
 
-                var json = File.ReadAllText(DataFilePath);
-                var data = string.IsNullOrWhiteSpace(json)
-                    ? new CrmDataStore()
-                    : JsonConvert.DeserializeObject<CrmDataStore>(json) ?? new CrmDataStore();
-
-                Normalize(data);
-                return data;
+                    Normalize(data);
+                    return data;
+                }
             }
         }
 
@@ -37,25 +40,25 @@ namespace GLC_EXPRESS.Services
             lock (SyncRoot)
             {
                 Normalize(data);
-                EnsureStorage();
-                File.WriteAllText(DataFilePath, JsonConvert.SerializeObject(data, Formatting.Indented));
-            }
-        }
 
-        private static void EnsureStorage()
-        {
-            var directory = Path.GetDirectoryName(DataFilePath);
+                using (var database = AppDatabase.Open())
+                {
+                    database.BeginTrans();
 
-            if (string.IsNullOrWhiteSpace(directory))
-            {
-                throw new InvalidOperationException("CRM storage directory could not be resolved.");
-            }
-
-            Directory.CreateDirectory(directory);
-
-            if (!File.Exists(DataFilePath))
-            {
-                File.WriteAllText(DataFilePath, JsonConvert.SerializeObject(new CrmDataStore(), Formatting.Indented));
+                    try
+                    {
+                        ReplaceCollection(database.GetCollection<ClientRecord>("clients"), data.Clients);
+                        ReplaceCollection(database.GetCollection<DriverRecord>("drivers"), data.Drivers);
+                        ReplaceCollection(database.GetCollection<FleetVehicleRecord>("fleet"), data.FleetVehicles);
+                        ReplaceCollection(database.GetCollection<TripRecord>("trips"), data.Trips);
+                        database.Commit();
+                    }
+                    catch
+                    {
+                        database.Rollback();
+                        throw;
+                    }
+                }
             }
         }
 
@@ -73,18 +76,15 @@ namespace GLC_EXPRESS.Services
             }
         }
 
-        private static string DataFilePath
+        private static void ReplaceCollection<TRecord>(ILiteCollection<TRecord> collection, IEnumerable<TRecord> records)
         {
-            get
+            collection.DeleteAll();
+
+            var items = records == null ? new List<TRecord>() : records.ToList();
+
+            if (items.Count > 0)
             {
-                var context = HttpContext.Current;
-
-                if (context == null)
-                {
-                    throw new InvalidOperationException("CRM repository requires an active HTTP context.");
-                }
-
-                return context.Server.MapPath("~/App_Data/crm-data.json");
+                collection.InsertBulk(items);
             }
         }
     }

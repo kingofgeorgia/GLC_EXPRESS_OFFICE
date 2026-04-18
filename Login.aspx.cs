@@ -1,6 +1,7 @@
 using System;
-using System.Web.UI;
 using System.Web.Security;
+using System.Web.UI;
+using GLC_EXPRESS.Models;
 using GLC_EXPRESS.Services;
 
 namespace GLC_EXPRESS
@@ -18,20 +19,22 @@ namespace GLC_EXPRESS
         protected void SignInButton_Click(object sender, EventArgs e)
         {
             ErrorPanel.Visible = false;
+            AuthUserRecord user;
 
             if (!Page.IsValid)
             {
                 return;
             }
 
-            if (!AuthService.ValidateCredentials(UsernameTextBox.Text, PasswordTextBox.Text))
+            if (!AuthService.TryAuthenticate(UsernameTextBox.Text, PasswordTextBox.Text, out user))
             {
                 ErrorPanel.Visible = true;
                 ErrorLiteral.Text = "Invalid username or password.";
                 return;
             }
 
-            FormsAuthentication.SetAuthCookie(UsernameTextBox.Text.Trim(), RememberMeCheckBox.Checked);
+            var username = user == null ? UsernameTextBox.Text.Trim() : user.Username;
+            FormsAuthentication.SetAuthCookie(username, RememberMeCheckBox.Checked);
             RedirectToTarget();
         }
 

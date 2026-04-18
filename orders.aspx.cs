@@ -14,10 +14,15 @@ namespace GLC_EXPRESS
     public partial class orders : Page
     {
         private const string DefaultTab = "trips";
+        private static readonly string[] AllowedCrmRoles = { "Admin", "Manager", "Dispatcher" };
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            EnsureAuthenticated();
+            if (!EnsureAuthenticated() || !EnsureCrmAccess())
+            {
+                return;
+            }
+
             HideMessage();
 
             if (!IsPostBack)
@@ -410,6 +415,22 @@ namespace GLC_EXPRESS
             return string.Format("<a href=\"{0}\" target=\"_blank\" rel=\"noopener\">{1}</a>", url, fileName);
         }
 
+        protected string GetCurrentUserRolesLabel()
+        {
+            if (Context == null || Context.User == null)
+            {
+                return "Без ролей";
+            }
+
+            var roles = AllowedCrmRoles
+                .Where(role => Context.User.IsInRole(role))
+                .ToList();
+
+            return roles.Count == 0
+                ? "Без ролей"
+                : string.Join(", ", roles);
+        }
+
         private string ActiveTab
         {
             get
@@ -470,13 +491,30 @@ namespace GLC_EXPRESS
             }
         }
 
-        private void EnsureAuthenticated()
+        private bool EnsureAuthenticated()
         {
             if (!Request.IsAuthenticated)
             {
                 Response.Redirect(FormsAuthentication.LoginUrl + "?ReturnUrl=" + Server.UrlEncode(Request.RawUrl), false);
                 Context.ApplicationInstance.CompleteRequest();
+                return false;
             }
+
+            return true;
+        }
+
+        private bool EnsureCrmAccess()
+        {
+            if (Context != null
+                && Context.User != null
+                && AllowedCrmRoles.Any(role => Context.User.IsInRole(role)))
+            {
+                return true;
+            }
+
+            Response.Redirect("~/AccessDenied.aspx?ReturnUrl=" + Server.UrlEncode(Request.RawUrl), false);
+            Context.ApplicationInstance.CompleteRequest();
+            return false;
         }
 
         private void BindAll()

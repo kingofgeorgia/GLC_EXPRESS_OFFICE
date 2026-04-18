@@ -12,6 +12,7 @@
 
         <div class="alert alert-info crm-user-banner">
             Вы вошли как <strong><%: Context.User.Identity.Name %></strong>.
+            Роли: <strong><%: GetCurrentUserRolesLabel() %></strong>.
         </div>
 
         <ul class="nav nav-tabs crm-tabs">
