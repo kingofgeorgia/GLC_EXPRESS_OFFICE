@@ -46,6 +46,8 @@ namespace GLC_EXPRESS
 
         protected global::System.Web.UI.WebControls.Button TripsCancelEditButton;
 
+        protected global::System.Web.UI.WebControls.Button NewTripButton;
+
         protected global::System.Web.UI.WebControls.Repeater TripsRepeater;
 
         protected global::System.Web.UI.WebControls.Panel TripsEmptyPanel;
@@ -69,6 +71,8 @@ namespace GLC_EXPRESS
         protected global::System.Web.UI.WebControls.Button AddDriverButton;
 
         protected global::System.Web.UI.WebControls.Button DriversCancelEditButton;
+
+        protected global::System.Web.UI.WebControls.Button NewDriverButton;
 
         protected global::System.Web.UI.WebControls.Repeater DriversRepeater;
 
@@ -100,9 +104,19 @@ namespace GLC_EXPRESS
 
         protected global::System.Web.UI.WebControls.Button FleetCancelEditButton;
 
+        protected global::System.Web.UI.WebControls.Button NewFleetButton;
+
         protected global::System.Web.UI.WebControls.Repeater FleetRepeater;
 
         protected global::System.Web.UI.WebControls.Panel FleetEmptyPanel;
+
+        protected global::System.Web.UI.WebControls.Repeater CarsRepeater;
+
+        protected global::System.Web.UI.WebControls.Panel CarsEmptyPanel;
+
+        protected global::System.Web.UI.WebControls.Panel CarsDetailPanel;
+
+        protected global::System.Web.UI.WebControls.Literal CarsDetailLiteral;
 
         protected global::System.Web.UI.WebControls.Literal ClientsFormTitleLiteral;
 
@@ -122,8 +136,104 @@ namespace GLC_EXPRESS
 
         protected global::System.Web.UI.WebControls.Button ClientsCancelEditButton;
 
+        protected global::System.Web.UI.WebControls.Button NewClientButton;
+
         protected global::System.Web.UI.WebControls.Repeater ClientsRepeater;
 
         protected global::System.Web.UI.WebControls.Panel ClientsEmptyPanel;
+
+        protected global::System.Web.UI.WebControls.TextBox SettingsCompanyNameTextBox;
+
+        protected global::System.Web.UI.WebControls.TextBox SettingsNewRoleTextBox;
+
+        protected global::System.Web.UI.WebControls.Button AddSettingsRoleButton;
+
+        protected global::System.Web.UI.WebControls.Repeater SettingsRolesRepeater;
+
+        protected global::System.Web.UI.WebControls.TextBox SettingsNewTripStatusTextBox;
+
+        protected global::System.Web.UI.WebControls.Button AddSettingsTripStatusButton;
+
+        protected global::System.Web.UI.WebControls.Repeater SettingsTripStatusesRepeater;
+
+        protected global::System.Web.UI.WebControls.DropDownList SettingsDefaultTripStatusDropDownList;
+
+        protected global::System.Web.UI.WebControls.DropDownList SettingsDefaultTabDropDownList;
+
+        protected global::System.Web.UI.WebControls.CheckBox SettingsRequireUniqueTripNumbersCheckBox;
+
+        protected global::System.Web.UI.WebControls.CheckBox SettingsValidatePrepaymentCheckBox;
+
+        protected global::System.Web.UI.WebControls.FileUpload SettingsLogoUpload;
+
+        protected global::System.Web.UI.WebControls.TextBox SettingsAllowedDocumentExtensionsTextBox;
+
+        protected global::System.Web.UI.WebControls.TextBox SettingsAllowedLogoExtensionsTextBox;
+
+        protected global::System.Web.UI.WebControls.Button SaveSettingsButton;
+
+    protected global::System.Web.UI.WebControls.FileUpload SettingsImportJsonUpload;
+
+    protected global::System.Web.UI.WebControls.Button ImportSettingsButton;
+
+    protected global::System.Web.UI.WebControls.Button ExportSettingsButton;
+
+    protected global::System.Web.UI.WebControls.DropDownList SettingsHomeContentLanguageDropDownList;
+
+    protected global::System.Web.UI.WebControls.TextBox SettingsHomeContactAddressTextBox;
+
+    protected global::System.Web.UI.WebControls.TextBox SettingsHomeContactPhoneTextBox;
+
+    protected global::System.Web.UI.WebControls.TextBox SettingsHomeContactHoursTextBox;
+
+    protected global::System.Web.UI.WebControls.TextBox SettingsHomeContactWhatsAppUrlTextBox;
+
+    protected global::System.Web.UI.WebControls.TextBox SettingsNewHomePartnerTextBox;
+
+    protected global::System.Web.UI.WebControls.Button AddSettingsHomePartnerButton;
+
+    protected global::System.Web.UI.WebControls.Repeater SettingsHomePartnersRepeater;
+
+    protected global::System.Web.UI.WebControls.TextBox SettingsNewHomeReviewQuoteTextBox;
+
+    protected global::System.Web.UI.WebControls.TextBox SettingsNewHomeReviewAuthorTextBox;
+
+    protected global::System.Web.UI.WebControls.Button AddSettingsHomeReviewButton;
+
+    protected global::System.Web.UI.WebControls.Repeater SettingsHomeReviewsRepeater;
+
+    protected global::System.Web.UI.WebControls.TextBox SettingsLeadFilterPhoneTextBox;
+
+    protected global::System.Web.UI.WebControls.TextBox SettingsLeadFilterMessengerTextBox;
+
+    protected global::System.Web.UI.WebControls.TextBox SettingsLeadFilterDirectionTextBox;
+
+    protected global::System.Web.UI.WebControls.DropDownList SettingsLeadFilterCargoTypeDropDownList;
+
+    protected global::System.Web.UI.WebControls.TextBox SettingsLeadFilterCommentTextBox;
+
+    protected global::System.Web.UI.WebControls.Button ApplySettingsLeadFiltersButton;
+
+    protected global::System.Web.UI.WebControls.Button ResetSettingsLeadFiltersButton;
+
+    protected global::System.Web.UI.WebControls.Repeater SettingsInquiryListRepeater;
+
+    protected global::System.Web.UI.WebControls.Panel SettingsInquiryDetailPanel;
+
+    protected global::System.Web.UI.WebControls.Button CloseSettingsInquiryDetailButton;
+
+    protected global::System.Web.UI.WebControls.Repeater SettingsRecentInquiriesRepeater;
+
+    protected global::System.Web.UI.WebControls.Panel SettingsRecentInquiriesEmptyPanel;
+
+        protected global::System.Web.UI.WebControls.Literal SettingsCurrentCompanyNameLiteral;
+
+        protected global::System.Web.UI.WebControls.Panel SettingsCurrentLogoPanel;
+
+        protected global::System.Web.UI.HtmlControls.HtmlAnchor SettingsCurrentLogoLink;
+
+        protected global::System.Web.UI.WebControls.Image SettingsLogoPreviewImage;
+
+        protected global::System.Web.UI.WebControls.Panel SettingsNoLogoPanel;
     }
 }

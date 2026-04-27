@@ -2,11 +2,11 @@
 
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="<%= GetCurrentHtmlLanguage() %>">
 <head runat="server">
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title><%: Page.Title %> - GLC EXPRESS</title>
+    <title><%: Page.Title %> - <%: GetSiteBrandName() %></title>
 
     <asp:PlaceHolder runat="server">
         <%: Scripts.Render("~/bundles/modernizr") %>
@@ -38,42 +38,106 @@
             </Scripts>
         </asp:ScriptManager>
 
-        <div class="navbar navbar-inverse navbar-fixed-top">
-            <div class="container">
+        <div class="navbar navbar-inverse navbar-fixed-top site-navbar">
+            <div class="<%= GetNavbarContainerCss() %>">
                 <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse" title="more options">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse" title="<%: T("NavToggleTitle") %>">
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" runat="server" href="~/">GLC EXPRESS</a>
+                    <a class="navbar-brand navbar-brand-logo" href="<%= GetHomeRootUrl() %>">
+                        <asp:Image ID="NavbarLogoImage" runat="server" CssClass="site-navbar-logo" AlternateText="GLC EXPRESS" Visible="false" />
+                        <asp:Literal ID="NavbarBrandTextLiteral" runat="server" Text="GLC EXPRESS" />
+                    </a>
                 </div>
                 <div class="navbar-collapse collapse">
-                    <ul class="nav navbar-nav">
-                        <li><a runat="server" href="~/">Home</a></li>
-                        <li><a runat="server" href="~/About">About</a></li>
-                        <li><a runat="server" href="~/Contact">Contact</a></li>
-                        <li><a runat="server" href="~/orders">CRM</a></li>
+                    <ul class="nav navbar-nav site-main-nav">
+                        <li><a href="<%= GetHomeSectionUrl("home") %>"><%: T("NavHome") %></a></li>
+                        <li><a href="<%= GetHomeSectionUrl("turnkey-order") %>"><%: T("NavTurnkeyOrder") %></a></li>
+                        <li><a href="<%= GetHomeSectionUrl("delivery") %>"><%: T("NavDelivery") %></a></li>
+                        <li><a href="<%= GetHomeSectionUrl("auction-center") %>"><%: T("NavAuctionCenter") %></a></li>
+                        <li><a href="<%= GetHomeSectionUrl("advantages") %>"><%: T("NavAdvantages") %></a></li>
+                        <li><a href="<%= GetHomeSectionUrl("about") %>"><%: T("NavAbout") %></a></li>
+                        <li><a href="<%= GetHomeSectionUrl("partners") %>"><%: T("NavPartners") %></a></li>
+                        <li><a href="<%= GetHomeSectionUrl("reviews") %>"><%: T("NavReviews") %></a></li>
+                        <li><a href="<%= GetHomeSectionUrl("contacts") %>"><%: T("NavContacts") %></a></li>
                     </ul>
-                    <ul class="nav navbar-nav navbar-right">
+                    <% if (ShouldShowLanguageSwitcher()) { %>
+                        <ul class="nav navbar-nav navbar-right site-language-nav">
+                            <li class="<%= GetLanguageLinkCss("ru") %>"><a href="<%= GetLanguageSwitchUrl("ru") %>">RU</a></li>
+                            <li class="<%= GetLanguageLinkCss("en") %>"><a href="<%= GetLanguageSwitchUrl("en") %>">EN</a></li>
+                            <li class="<%= GetLanguageLinkCss("ge") %>"><a href="<%= GetLanguageSwitchUrl("ge") %>">GE</a></li>
+                        </ul>
+                    <% } %>
+                    <ul class="nav navbar-nav navbar-right site-account-nav">
                         <% if (Request.IsAuthenticated) { %>
-                            <li class="navbar-text">Signed in as <%: Context.User.Identity.Name %></li>
-                            <li><a runat="server" href="~/Logout">Logout</a></li>
+                            <li><a href="<%= GetOrdersUrl() %>"><%: T("AuthMyAccount") %></a></li>
+                            <li><a href="<%= GetCrmTabUrl("settings") %>"><%: T("AuthSettings") %></a></li>
+                            <li><a href="<%= GetLogoutUrl() %>"><%: T("AuthLogout") %></a></li>
                         <% } else { %>
-                            <li><a runat="server" href="~/Login">Login</a></li>
+                            <li><a href="<%= GetLoginUrl() %>"><%: T("AuthSignIn") %></a></li>
                         <% } %>
                     </ul>
                 </div>
             </div>
         </div>
-        <div class="container body-content">
+        <div class="<%= GetMainContainerCss() %>">
             <asp:ContentPlaceHolder ID="MainContent" runat="server">
             </asp:ContentPlaceHolder>
-            <hr />
-            <footer>
-                <p>&copy; <%: DateTime.Now.Year %> - My ASP.NET Application</p>
+            <footer class="site-footer">
+                <div class="site-footer-inner">
+                    <p>&copy; 2023 <%: GetSiteBrandName() %></p>
+                    <p><a href="<%= GetPrivacyPolicyUrl() %>"><%: T("FooterPrivacyPolicy") %></a></p>
+                    <p><%: T("FooterPoweredBy") %></p>
+                </div>
             </footer>
         </div>
+
+        <div id="siteCookieNotice" class="site-cookie-notice">
+            <div class="site-cookie-copy">
+                <strong><%: T("CookieNoticeTitle") %></strong>
+                <p><%: T("CookieNoticeText") %></p>
+            </div>
+            <div class="site-cookie-actions">
+                <button type="button" class="btn btn-primary btn-sm" data-cookie-choice="accepted"><%: T("CookieAccept") %></button>
+                <button type="button" class="btn btn-default btn-sm" data-cookie-choice="declined"><%: T("CookieDecline") %></button>
+            </div>
+        </div>
+
+        <script type="text/javascript">
+            (function () {
+                var storageKey = 'glc-cookie-choice';
+                var notice = document.getElementById('siteCookieNotice');
+
+                if (!notice) {
+                    return;
+                }
+
+                try {
+                    if (window.localStorage && window.localStorage.getItem(storageKey)) {
+                        notice.className += ' is-hidden';
+                    }
+                } catch (error) {
+                }
+
+                var buttons = notice.querySelectorAll('[data-cookie-choice]');
+                for (var index = 0; index < buttons.length; index++) {
+                    buttons[index].addEventListener('click', function () {
+                        var choice = this.getAttribute('data-cookie-choice') || 'accepted';
+                        try {
+                            if (window.localStorage) {
+                                window.localStorage.setItem(storageKey, choice);
+                            }
+                        } catch (error) {
+                        }
+                        if (notice.className.indexOf('is-hidden') === -1) {
+                            notice.className += ' is-hidden';
+                        }
+                    });
+                }
+            })();
+        </script>
 
     </form>
 </body>

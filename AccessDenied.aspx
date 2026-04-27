@@ -1,13 +1,14 @@
-<%@ Page Title="Доступ запрещен" Language="C#" MasterPageFile="~/Site.Master" %>
+<%@ Page Title="Доступ запрещен" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="AccessDenied.aspx.cs" Inherits="GLC_EXPRESS.AccessDenied" %>
+<%@ Import Namespace="System.Linq" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
     <div class="jumbotron" style="margin-top: 30px;">
-        <h1>Доступ запрещен</h1>
-        <p class="lead">У вашей учетной записи пока нет прав на работу с CRM.</p>
-        <p class="text-muted">Для доступа нужны роли: <strong>Admin</strong>, <strong>Manager</strong> или <strong>Dispatcher</strong>.</p>
+        <h1><%: T("AccessDeniedTitle") %></h1>
+        <p class="lead"><%: T("AccessDeniedLead") %></p>
+        <p class="text-muted"><%: string.Format(T("AccessDeniedRolesLead"), GetAllowedRolesText()) %></p>
         <p>
-            <a href="Default.aspx" class="btn btn-primary btn-lg">На главную</a>
-            <a href="Logout.aspx" class="btn btn-default btn-lg">Выйти</a>
+            <a href="<%= GetHomeUrl() %>" class="btn btn-primary btn-lg"><%: T("NavHome") %></a>
+            <a href="<%= GetLogoutUrl() %>" class="btn btn-default btn-lg"><%: T("AuthLogout") %></a>
         </p>
     </div>
 </asp:Content>

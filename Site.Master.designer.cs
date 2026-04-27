@@ -14,6 +14,10 @@ namespace GLC_EXPRESS
     public partial class SiteMaster
     {
 
+        protected global::System.Web.UI.WebControls.Image NavbarLogoImage;
+
+        protected global::System.Web.UI.WebControls.Literal NavbarBrandTextLiteral;
+
         /// <summary>
         /// MainContent control.
         /// </summary>

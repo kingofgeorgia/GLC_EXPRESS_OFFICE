@@ -21,6 +21,7 @@ namespace GLC_EXPRESS.Services
                         Trips = database.GetCollection<TripRecord>("trips").FindAll().ToList(),
                         Drivers = database.GetCollection<DriverRecord>("drivers").FindAll().ToList(),
                         FleetVehicles = database.GetCollection<FleetVehicleRecord>("fleet").FindAll().ToList(),
+                        Cars = database.GetCollection<CarRecord>("cars").FindAll().ToList(),
                         Clients = database.GetCollection<ClientRecord>("clients").FindAll().ToList()
                     };
 
@@ -48,6 +49,7 @@ namespace GLC_EXPRESS.Services
                     try
                     {
                         ReplaceCollection(database.GetCollection<ClientRecord>("clients"), data.Clients);
+                        ReplaceCollection(database.GetCollection<CarRecord>("cars"), data.Cars);
                         ReplaceCollection(database.GetCollection<DriverRecord>("drivers"), data.Drivers);
                         ReplaceCollection(database.GetCollection<FleetVehicleRecord>("fleet"), data.FleetVehicles);
                         ReplaceCollection(database.GetCollection<TripRecord>("trips"), data.Trips);
@@ -67,6 +69,7 @@ namespace GLC_EXPRESS.Services
             data.Trips = data.Trips ?? new List<TripRecord>();
             data.Drivers = data.Drivers ?? new List<DriverRecord>();
             data.FleetVehicles = data.FleetVehicles ?? new List<FleetVehicleRecord>();
+            data.Cars = data.Cars ?? new List<CarRecord>();
             data.Clients = data.Clients ?? new List<ClientRecord>();
 
             foreach (var vehicle in data.FleetVehicles)

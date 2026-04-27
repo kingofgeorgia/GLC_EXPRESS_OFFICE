@@ -13,5 +13,46 @@ namespace GLC_EXPRESS
 
     public partial class _Default
     {
+        protected global::System.Web.UI.WebControls.Panel HomeLeadAlertPanel;
+
+        protected global::System.Web.UI.WebControls.Literal HomeLeadAlertLiteral;
+
+        protected global::System.Web.UI.WebControls.Repeater HomePartnersRepeater;
+
+        protected global::System.Web.UI.WebControls.Repeater HomeReviewsRepeater;
+
+        protected global::System.Web.UI.HtmlControls.HtmlAnchor HomeWhatsAppLink;
+
+        protected global::System.Web.UI.WebControls.Literal HomeContactPhoneLiteral;
+
+        protected global::System.Web.UI.WebControls.Literal HomeContactAddressLiteral;
+
+        protected global::System.Web.UI.WebControls.Literal HomeContactHoursLiteral;
+
+        protected global::System.Web.UI.WebControls.ValidationSummary HomeLeadValidationSummary;
+
+        protected global::System.Web.UI.WebControls.TextBox HomeLeadNameTextBox;
+
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator HomeLeadNameRequiredValidator;
+
+        protected global::System.Web.UI.WebControls.TextBox HomeLeadEmailTextBox;
+
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator HomeLeadEmailRequiredValidator;
+
+        protected global::System.Web.UI.WebControls.RegularExpressionValidator HomeLeadEmailFormatValidator;
+
+    protected global::System.Web.UI.WebControls.TextBox HomeLeadPhoneTextBox;
+
+    protected global::System.Web.UI.WebControls.TextBox HomeLeadMessengerTextBox;
+
+    protected global::System.Web.UI.WebControls.TextBox HomeLeadDirectionTextBox;
+
+    protected global::System.Web.UI.WebControls.DropDownList HomeLeadCargoTypeDropDownList;
+
+    protected global::System.Web.UI.WebControls.TextBox HomeLeadCommentTextBox;
+
+        protected global::System.Web.UI.WebControls.FileUpload HomeLeadAttachmentUpload;
+
+        protected global::System.Web.UI.WebControls.Button HomeLeadSubmitButton;
     }
 }

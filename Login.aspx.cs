@@ -10,6 +10,8 @@ namespace GLC_EXPRESS
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            ApplyLocalization();
+
             if (Request.IsAuthenticated)
             {
                 RedirectToTarget();
@@ -29,7 +31,7 @@ namespace GLC_EXPRESS
             if (!AuthService.TryAuthenticate(UsernameTextBox.Text, PasswordTextBox.Text, out user))
             {
                 ErrorPanel.Visible = true;
-                ErrorLiteral.Text = "Invalid username or password.";
+                ErrorLiteral.Text = T("LoginInvalidCredentials");
                 return;
             }
 
@@ -51,6 +53,19 @@ namespace GLC_EXPRESS
 
             Response.Redirect("~/orders", false);
             Context.ApplicationInstance.CompleteRequest();
+        }
+
+        protected string T(string key)
+        {
+            return PublicSiteLocalizationService.GetText(key);
+        }
+
+        private void ApplyLocalization()
+        {
+            Title = T("AuthSignIn");
+            UsernameRequiredValidator.ErrorMessage = T("LoginUsernameRequired");
+            PasswordRequiredValidator.ErrorMessage = T("LoginPasswordRequired");
+            SignInButton.Text = T("AuthSignIn");
         }
 
         private static bool UrlIsLocalToHost(string url)

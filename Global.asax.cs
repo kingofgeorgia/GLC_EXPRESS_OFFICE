@@ -10,6 +10,11 @@ namespace GLC_EXPRESS
 {
     public class Global : HttpApplication
     {
+        void Application_BeginRequest(object sender, EventArgs e)
+        {
+            PublicSiteLocalizationService.ApplyRequestLanguage(Context);
+        }
+
         void Application_Start(object sender, EventArgs e)
         {
             RouteConfig.RegisterRoutes(RouteTable.Routes);

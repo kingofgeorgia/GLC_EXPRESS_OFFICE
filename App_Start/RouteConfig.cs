@@ -10,6 +10,9 @@ namespace GLC_EXPRESS
     {
         public static void RegisterRoutes(RouteCollection routes)
         {
+            routes.MapPageRoute("HomeAliasRoute", "главная", "~/Default.aspx");
+            routes.MapPageRoute("PrivacyPolicyRoute", "privacy-policy", "~/PrivacyPolicy.aspx");
+
             var settings = new FriendlyUrlSettings();
             settings.AutoRedirectMode = RedirectMode.Permanent;
             routes.EnableFriendlyUrls(settings);

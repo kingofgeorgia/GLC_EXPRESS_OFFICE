@@ -1,0 +1,1 @@
+<%@ WebHandler Language="C#" CodeBehind="FileAsset.ashx.cs" Class="GLC_EXPRESS.FileAsset" %>

@@ -5,10 +5,10 @@
         <div class="col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
             <div class="panel panel-default" style="margin-top: 30px;">
                 <div class="panel-heading">
-                    <h2 class="panel-title">Sign In</h2>
+                    <h2 class="panel-title"><%: T("AuthSignIn") %></h2>
                 </div>
                 <div class="panel-body">
-                    <p class="text-muted">Enter your account credentials to continue.</p>
+                    <p class="text-muted"><%: T("LoginLead") %></p>
 
                     <asp:ValidationSummary ID="LoginValidationSummary" runat="server" CssClass="alert alert-danger" ValidationGroup="LoginForm" />
 
@@ -17,25 +17,25 @@
                     </asp:Panel>
 
                     <div class="form-group">
-                        <label for="<%= UsernameTextBox.ClientID %>">Username</label>
+                        <label for="<%= UsernameTextBox.ClientID %>"><%: T("LoginUsername") %></label>
                         <asp:TextBox ID="UsernameTextBox" runat="server" CssClass="form-control" />
-                        <asp:RequiredFieldValidator ID="UsernameRequiredValidator" runat="server" ControlToValidate="UsernameTextBox" CssClass="text-danger" ErrorMessage="Username is required." ValidationGroup="LoginForm" Display="Dynamic" />
+                        <asp:RequiredFieldValidator ID="UsernameRequiredValidator" runat="server" ControlToValidate="UsernameTextBox" CssClass="text-danger" ValidationGroup="LoginForm" Display="Dynamic" />
                     </div>
 
                     <div class="form-group">
-                        <label for="<%= PasswordTextBox.ClientID %>">Password</label>
+                        <label for="<%= PasswordTextBox.ClientID %>"><%: T("LoginPassword") %></label>
                         <asp:TextBox ID="PasswordTextBox" runat="server" CssClass="form-control" TextMode="Password" />
-                        <asp:RequiredFieldValidator ID="PasswordRequiredValidator" runat="server" ControlToValidate="PasswordTextBox" CssClass="text-danger" ErrorMessage="Password is required." ValidationGroup="LoginForm" Display="Dynamic" />
+                        <asp:RequiredFieldValidator ID="PasswordRequiredValidator" runat="server" ControlToValidate="PasswordTextBox" CssClass="text-danger" ValidationGroup="LoginForm" Display="Dynamic" />
                     </div>
 
                     <div class="checkbox">
                         <label>
                             <asp:CheckBox ID="RememberMeCheckBox" runat="server" />
-                            Remember me
+                            <%: T("LoginRememberMe") %>
                         </label>
                     </div>
 
-                    <asp:Button ID="SignInButton" runat="server" CssClass="btn btn-primary btn-block" Text="Sign In" OnClick="SignInButton_Click" ValidationGroup="LoginForm" />
+                    <asp:Button ID="SignInButton" runat="server" CssClass="btn btn-primary btn-block" OnClick="SignInButton_Click" ValidationGroup="LoginForm" />
                 </div>
             </div>
         </div>
