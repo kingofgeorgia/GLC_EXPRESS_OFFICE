@@ -258,6 +258,37 @@ _UpgradeReport_Files/
 Backup*/
 UpgradeLog*.XML
 UpgradeLog*.htm
+
+# Local workspace data and debug artifacts
+.vscode/
+App_Data/home-inquiries.json
+App_Data/ProtectedUploads/
+
+# Ad-hoc validation and tracing artifacts
+actual_names.txt
+automated_test.ps1
+check_tab.ps1
+debug.ps1
+e2e_validation.ps1
+final_flow*.ps1
+final_task*.ps1
+findings.txt
+flow.ps1
+ids.txt
+lead_test*.ps1
+login_source.html
+names.txt
+orders_content.html
+orders_page.html
+process_flow*.ps1
+repeater_context.txt
+task_script.ps1
+task_verification.ps1
+test_*.ps1
+trace_login*.ps1
+update_response.html
+final_update_response.html
+validate_full_flow.ps1
 ServiceFabricBackup/
 *.rptproj.bak
 
