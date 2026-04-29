@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Globalization;
+using System.IO;
 using System.Web;
 using System.Web.UI;
 using GLC_EXPRESS.Models;
@@ -101,6 +103,34 @@ namespace GLC_EXPRESS
         protected string GetPrivacyPolicyUrl()
         {
             return PublicSiteLocalizationService.ApplyLanguageToUrl(ResolveUrl("~/privacy-policy"));
+        }
+
+        protected string GetVersionedContentUrl(string virtualPath)
+        {
+            var resolvedUrl = ResolveUrl(virtualPath ?? string.Empty);
+
+            if (string.IsNullOrWhiteSpace(resolvedUrl) || Server == null)
+            {
+                return resolvedUrl;
+            }
+
+            try
+            {
+                var absolutePath = Server.MapPath(virtualPath);
+
+                if (!File.Exists(absolutePath))
+                {
+                    return resolvedUrl;
+                }
+
+                var version = File.GetLastWriteTimeUtc(absolutePath).Ticks.ToString(CultureInfo.InvariantCulture);
+                var separator = resolvedUrl.Contains("?") ? "&" : "?";
+                return resolvedUrl + separator + "v=" + version;
+            }
+            catch
+            {
+                return resolvedUrl;
+            }
         }
 
         private void ApplyBranding()

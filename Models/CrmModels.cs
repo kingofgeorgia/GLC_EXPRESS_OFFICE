@@ -149,11 +149,42 @@ namespace GLC_EXPRESS.Models
         public DateTime CreatedAtUtc { get; set; }
     }
 
+    public class CarDealerRecord
+    {
+        public CarDealerRecord()
+        {
+            Id = Guid.NewGuid().ToString("N");
+            CreatedAtUtc = DateTime.UtcNow;
+        }
+
+        public string Id { get; set; }
+
+        public string Name { get; set; }
+
+        public string NameNormalized { get; set; }
+
+        public DateTime CreatedAtUtc { get; set; }
+    }
+
+    public class CarChangeLogRecord
+    {
+        public string FieldName { get; set; }
+
+        public string PreviousValue { get; set; }
+
+        public string NewValue { get; set; }
+
+        public string ChangedBy { get; set; }
+
+        public DateTime ChangedAtUtc { get; set; }
+    }
+
     public class CarRecord
     {
         public CarRecord()
         {
             Id = Guid.NewGuid().ToString("N");
+            ChangeHistory = new List<CarChangeLogRecord>();
             CreatedAtUtc = DateTime.UtcNow;
         }
 
@@ -224,6 +255,8 @@ namespace GLC_EXPRESS.Models
         public string Passport { get; set; }
 
         public string Address { get; set; }
+
+        public List<CarChangeLogRecord> ChangeHistory { get; set; }
 
         public DateTime CreatedAtUtc { get; set; }
     }

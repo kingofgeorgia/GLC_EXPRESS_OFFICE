@@ -77,6 +77,11 @@ namespace GLC_EXPRESS.Services
                 vehicle.AssignedDriverIds = vehicle.AssignedDriverIds ?? new List<string>();
                 vehicle.AssignedDriverNames = vehicle.AssignedDriverNames ?? new List<string>();
             }
+
+            foreach (var car in data.Cars)
+            {
+                car.ChangeHistory = car.ChangeHistory ?? new List<CarChangeLogRecord>();
+            }
         }
 
         private static void ReplaceCollection<TRecord>(ILiteCollection<TRecord> collection, IEnumerable<TRecord> records)

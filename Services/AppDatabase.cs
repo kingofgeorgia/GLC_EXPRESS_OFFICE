@@ -63,6 +63,8 @@ namespace GLC_EXPRESS.Services
             database.GetCollection<HomeInquiryRecord>("home_inquiries").EnsureIndex(item => item.CreatedAtUtc, false);
             database.GetCollection<HomeInquiryRecord>("home_inquiries").EnsureIndex(item => item.Status, false);
             database.GetCollection<HomeInquiryRecord>("home_inquiries").EnsureIndex(item => item.AssignedManager, false);
+            database.GetCollection<CarDealerRecord>("car_dealers").EnsureIndex(item => item.Id, true);
+            database.GetCollection<CarDealerRecord>("car_dealers").EnsureIndex(item => item.NameNormalized, true);
             database.GetCollection<StoredFileAccessLogRecord>("file_access_logs").EnsureIndex(item => item.StoredPath, false);
             database.GetCollection<StoredFileAccessLogRecord>("file_access_logs").EnsureIndex(item => item.AccessedAtUtc, false);
 
@@ -215,6 +217,10 @@ namespace GLC_EXPRESS.Services
                 NormalizeCollectionDocuments(
                     database.GetCollection<BsonDocument>("cars"),
                     new[] { "SourceInquiryId", "ClientId", "ClientName", "TripNumber", "Forwarder", "Dealer", "Year", "Brand", "Model", "Vin", "Location", "Title", "Key", "Inspection", "ReExport", "Status", "StartPrice", "Invoice", "PortCost", "LoadingCost", "TowTruckCost", "ParkingCost", "InspectionCost", "ReExportCost", "ExpertiseCost", "DeliveryCost", "Volume", "Power", "Comment", "FirstName", "LastName", "Passport", "Address" });
+
+                NormalizeCollectionDocuments(
+                    database.GetCollection<BsonDocument>("car_dealers"),
+                    new[] { "Name", "NameNormalized" });
 
                 NormalizeCollectionDocuments(
                     database.GetCollection<BsonDocument>("home_inquiries"),
@@ -544,6 +550,11 @@ namespace GLC_EXPRESS.Services
             {
                 vehicle.AssignedDriverIds = vehicle.AssignedDriverIds ?? new List<string>();
                 vehicle.AssignedDriverNames = vehicle.AssignedDriverNames ?? new List<string>();
+            }
+
+            foreach (var car in data.Cars)
+            {
+                car.ChangeHistory = car.ChangeHistory ?? new List<CarChangeLogRecord>();
             }
         }
 

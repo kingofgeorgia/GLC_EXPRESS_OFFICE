@@ -1,4 +1,5 @@
 using System;
+using System.Web;
 using System.Web.Security;
 using System.Web.UI;
 using GLC_EXPRESS.Models;
@@ -8,9 +9,16 @@ namespace GLC_EXPRESS
 {
     public partial class Login : Page
     {
+        private const string AutoLoginPreferenceCookieName = "glc-auto-login";
+
         protected void Page_Load(object sender, EventArgs e)
         {
             ApplyLocalization();
+
+            if (!IsPostBack)
+            {
+                RememberMeCheckBox.Checked = HasAutoLoginPreference();
+            }
 
             if (Request.IsAuthenticated)
             {
@@ -36,6 +44,7 @@ namespace GLC_EXPRESS
             }
 
             var username = user == null ? UsernameTextBox.Text.Trim() : user.Username;
+            StoreAutoLoginPreference(RememberMeCheckBox.Checked);
             FormsAuthentication.SetAuthCookie(username, RememberMeCheckBox.Checked);
             RedirectToTarget();
         }
@@ -58,6 +67,36 @@ namespace GLC_EXPRESS
         protected string T(string key)
         {
             return PublicSiteLocalizationService.GetText(key);
+        }
+
+        private bool HasAutoLoginPreference()
+        {
+            return Request != null
+                && Request.Cookies[AutoLoginPreferenceCookieName] != null
+                && string.Equals(Request.Cookies[AutoLoginPreferenceCookieName].Value, "1", StringComparison.Ordinal);
+        }
+
+        private void StoreAutoLoginPreference(bool enabled)
+        {
+            if (Response == null)
+            {
+                return;
+            }
+
+            var cookie = new HttpCookie(AutoLoginPreferenceCookieName, enabled ? "1" : string.Empty);
+            cookie.HttpOnly = false;
+            cookie.Path = "/";
+
+            if (enabled)
+            {
+                cookie.Expires = DateTime.UtcNow.AddDays(30);
+            }
+            else
+            {
+                cookie.Expires = DateTime.UtcNow.AddDays(-1);
+            }
+
+            Response.Cookies.Add(cookie);
         }
 
         private void ApplyLocalization()

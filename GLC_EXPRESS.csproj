@@ -53,6 +53,7 @@
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Configuration" />
@@ -250,6 +251,7 @@
     <Compile Include="Services\AuthService.cs" />
     <Compile Include="Services\StoredFileAuditService.cs" />
     <Compile Include="Services\BrandingSettingsService.cs" />
+    <Compile Include="Services\CrmExcelImportService.cs" />
     <Compile Include="Services\CrmRepository.cs" />
     <Compile Include="Services\CrmSettingsService.cs" />
     <Compile Include="Services\HomeInquiryService.cs" />

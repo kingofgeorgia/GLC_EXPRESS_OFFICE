@@ -18,6 +18,18 @@ namespace GLC_EXPRESS
 
         protected global::System.Web.UI.WebControls.Literal PageAlertLiteral;
 
+        protected global::System.Web.UI.WebControls.LinkButton DashboardTabButton;
+
+        protected global::System.Web.UI.WebControls.Literal DashboardKpiLiteral;
+
+        protected global::System.Web.UI.WebControls.Literal DashboardInquiryTrendLiteral;
+
+        protected global::System.Web.UI.WebControls.Literal DashboardInquiryStatusLiteral;
+
+        protected global::System.Web.UI.WebControls.Literal DashboardCarBrandLiteral;
+
+        protected global::System.Web.UI.WebControls.Literal DashboardTripTrendLiteral;
+
         protected global::System.Web.UI.WebControls.Literal TripsFormTitleLiteral;
 
         protected global::System.Web.UI.WebControls.HiddenField TripsEditingIdHiddenField;
@@ -48,6 +60,16 @@ namespace GLC_EXPRESS
 
         protected global::System.Web.UI.WebControls.Button NewTripButton;
 
+        protected global::System.Web.UI.WebControls.HiddenField TripsSelectedIdsHiddenField;
+
+        protected global::System.Web.UI.WebControls.Button TripsBulkEditButton;
+
+        protected global::System.Web.UI.WebControls.Button TripsBulkDeleteButton;
+
+        protected global::System.Web.UI.WebControls.DropDownList TripsBulkStatusDropDownList;
+
+        protected global::System.Web.UI.WebControls.Button TripsBulkStatusButton;
+
         protected global::System.Web.UI.WebControls.Repeater TripsRepeater;
 
         protected global::System.Web.UI.WebControls.Panel TripsEmptyPanel;
@@ -73,6 +95,12 @@ namespace GLC_EXPRESS
         protected global::System.Web.UI.WebControls.Button DriversCancelEditButton;
 
         protected global::System.Web.UI.WebControls.Button NewDriverButton;
+
+        protected global::System.Web.UI.WebControls.HiddenField DriversSelectedIdsHiddenField;
+
+        protected global::System.Web.UI.WebControls.Button DriversBulkEditButton;
+
+        protected global::System.Web.UI.WebControls.Button DriversBulkDeleteButton;
 
         protected global::System.Web.UI.WebControls.Repeater DriversRepeater;
 
@@ -106,17 +134,101 @@ namespace GLC_EXPRESS
 
         protected global::System.Web.UI.WebControls.Button NewFleetButton;
 
+        protected global::System.Web.UI.WebControls.HiddenField FleetSelectedIdsHiddenField;
+
+        protected global::System.Web.UI.WebControls.Button FleetBulkEditButton;
+
+        protected global::System.Web.UI.WebControls.Button FleetBulkDeleteButton;
+
         protected global::System.Web.UI.WebControls.Repeater FleetRepeater;
 
         protected global::System.Web.UI.WebControls.Panel FleetEmptyPanel;
+
+        protected global::System.Web.UI.WebControls.HiddenField CarsSelectedIdsHiddenField;
+
+        protected global::System.Web.UI.WebControls.DropDownList CarsBulkTripDropDownList;
+
+        protected global::System.Web.UI.WebControls.Button CarsBulkAssignTripButton;
 
         protected global::System.Web.UI.WebControls.Repeater CarsRepeater;
 
         protected global::System.Web.UI.WebControls.Panel CarsEmptyPanel;
 
+        protected global::System.Web.UI.WebControls.Literal DashboardCarsFilterNoticeLiteral;
+
         protected global::System.Web.UI.WebControls.Panel CarsDetailPanel;
 
-        protected global::System.Web.UI.WebControls.Literal CarsDetailLiteral;
+        protected global::System.Web.UI.WebControls.LinkButton CloseCarsDetailButton;
+
+        protected global::System.Web.UI.WebControls.Literal CarsDetailTitleLiteral;
+
+        protected global::System.Web.UI.WebControls.Literal CarsDetailMetaLiteral;
+
+        protected global::System.Web.UI.WebControls.DropDownList CarsDetailTripDropDownList;
+
+        protected global::System.Web.UI.WebControls.TextBox CarsDetailForwarderTextBox;
+
+        protected global::System.Web.UI.WebControls.TextBox CarsDetailDealerTextBox;
+
+        protected global::System.Web.UI.WebControls.Literal CarsDealerSuggestionsLiteral;
+
+        protected global::System.Web.UI.WebControls.TextBox CarsDetailStatusTextBox;
+
+        protected global::System.Web.UI.WebControls.TextBox CarsDetailStartPriceTextBox;
+
+        protected global::System.Web.UI.WebControls.TextBox CarsDetailInvoiceTextBox;
+
+        protected global::System.Web.UI.WebControls.TextBox CarsDetailYearTextBox;
+
+        protected global::System.Web.UI.WebControls.TextBox CarsDetailBrandTextBox;
+
+        protected global::System.Web.UI.WebControls.TextBox CarsDetailModelTextBox;
+
+        protected global::System.Web.UI.WebControls.TextBox CarsDetailVinTextBox;
+
+        protected global::System.Web.UI.WebControls.TextBox CarsDetailLocationTextBox;
+
+        protected global::System.Web.UI.WebControls.TextBox CarsDetailTitleTextBox;
+
+        protected global::System.Web.UI.WebControls.TextBox CarsDetailKeyTextBox;
+
+        protected global::System.Web.UI.WebControls.TextBox CarsDetailInspectionTextBox;
+
+        protected global::System.Web.UI.WebControls.TextBox CarsDetailReExportTextBox;
+
+        protected global::System.Web.UI.WebControls.TextBox CarsDetailVolumeTextBox;
+
+        protected global::System.Web.UI.WebControls.TextBox CarsDetailPowerTextBox;
+
+        protected global::System.Web.UI.WebControls.TextBox CarsDetailPortCostTextBox;
+
+        protected global::System.Web.UI.WebControls.TextBox CarsDetailLoadingCostTextBox;
+
+        protected global::System.Web.UI.WebControls.TextBox CarsDetailTowTruckCostTextBox;
+
+        protected global::System.Web.UI.WebControls.TextBox CarsDetailParkingCostTextBox;
+
+        protected global::System.Web.UI.WebControls.TextBox CarsDetailInspectionCostTextBox;
+
+        protected global::System.Web.UI.WebControls.TextBox CarsDetailReExportCostTextBox;
+
+        protected global::System.Web.UI.WebControls.TextBox CarsDetailExpertiseCostTextBox;
+
+        protected global::System.Web.UI.WebControls.TextBox CarsDetailDeliveryCostTextBox;
+
+        protected global::System.Web.UI.WebControls.TextBox CarsDetailFirstNameTextBox;
+
+        protected global::System.Web.UI.WebControls.TextBox CarsDetailLastNameTextBox;
+
+        protected global::System.Web.UI.WebControls.TextBox CarsDetailPassportTextBox;
+
+        protected global::System.Web.UI.WebControls.TextBox CarsDetailAddressTextBox;
+
+        protected global::System.Web.UI.WebControls.TextBox CarsDetailCommentTextBox;
+
+        protected global::System.Web.UI.WebControls.Button SaveCarsDetailButton;
+
+        protected global::System.Web.UI.WebControls.Literal CarsDetailHistoryLiteral;
 
         protected global::System.Web.UI.WebControls.Literal ClientsFormTitleLiteral;
 
@@ -137,6 +249,12 @@ namespace GLC_EXPRESS
         protected global::System.Web.UI.WebControls.Button ClientsCancelEditButton;
 
         protected global::System.Web.UI.WebControls.Button NewClientButton;
+
+        protected global::System.Web.UI.WebControls.HiddenField ClientsSelectedIdsHiddenField;
+
+        protected global::System.Web.UI.WebControls.Button ClientsBulkEditButton;
+
+        protected global::System.Web.UI.WebControls.Button ClientsBulkDeleteButton;
 
         protected global::System.Web.UI.WebControls.Repeater ClientsRepeater;
 
@@ -172,6 +290,16 @@ namespace GLC_EXPRESS
 
         protected global::System.Web.UI.WebControls.Button SaveSettingsButton;
 
+    protected global::System.Web.UI.WebControls.FileUpload SettingsImportExcelUpload;
+
+    protected global::System.Web.UI.WebControls.Button ImportCrmExcelButton;
+
+    protected global::System.Web.UI.WebControls.Button ExportCrmExcelTemplateButton;
+
+    protected global::System.Web.UI.WebControls.Panel CrmExcelImportReportPanel;
+
+    protected global::System.Web.UI.WebControls.Literal CrmExcelImportReportLiteral;
+
     protected global::System.Web.UI.WebControls.FileUpload SettingsImportJsonUpload;
 
     protected global::System.Web.UI.WebControls.Button ImportSettingsButton;
@@ -202,6 +330,8 @@ namespace GLC_EXPRESS
 
     protected global::System.Web.UI.WebControls.Repeater SettingsHomeReviewsRepeater;
 
+    protected global::System.Web.UI.WebControls.Literal DashboardInquiryFilterNoticeLiteral;
+
     protected global::System.Web.UI.WebControls.TextBox SettingsLeadFilterPhoneTextBox;
 
     protected global::System.Web.UI.WebControls.TextBox SettingsLeadFilterMessengerTextBox;
@@ -212,15 +342,27 @@ namespace GLC_EXPRESS
 
     protected global::System.Web.UI.WebControls.TextBox SettingsLeadFilterCommentTextBox;
 
+    protected global::System.Web.UI.WebControls.HiddenField SettingsLeadFilterPanelStateHiddenField;
+
+    protected global::System.Web.UI.WebControls.Literal SettingsLeadFilterSummaryLiteral;
+
     protected global::System.Web.UI.WebControls.Button ApplySettingsLeadFiltersButton;
 
     protected global::System.Web.UI.WebControls.Button ResetSettingsLeadFiltersButton;
 
+    protected global::System.Web.UI.WebControls.HiddenField InquiriesSelectedIdsHiddenField;
+
+    protected global::System.Web.UI.WebControls.DropDownList SettingsInquiryBulkStatusDropDownList;
+
+    protected global::System.Web.UI.WebControls.Button SettingsInquiryBulkStatusButton;
+
     protected global::System.Web.UI.WebControls.Repeater SettingsInquiryListRepeater;
+
+    protected global::System.Web.UI.WebControls.HiddenField SettingsSelectedInquiryIdHiddenField;
 
     protected global::System.Web.UI.WebControls.Panel SettingsInquiryDetailPanel;
 
-    protected global::System.Web.UI.WebControls.Button CloseSettingsInquiryDetailButton;
+    protected global::System.Web.UI.WebControls.LinkButton CloseSettingsInquiryDetailButton;
 
     protected global::System.Web.UI.WebControls.Repeater SettingsRecentInquiriesRepeater;
 

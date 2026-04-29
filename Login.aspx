@@ -18,13 +18,13 @@
 
                     <div class="form-group">
                         <label for="<%= UsernameTextBox.ClientID %>"><%: T("LoginUsername") %></label>
-                        <asp:TextBox ID="UsernameTextBox" runat="server" CssClass="form-control" />
+                        <asp:TextBox ID="UsernameTextBox" runat="server" CssClass="form-control" autocomplete="username" autocapitalize="none" spellcheck="false" />
                         <asp:RequiredFieldValidator ID="UsernameRequiredValidator" runat="server" ControlToValidate="UsernameTextBox" CssClass="text-danger" ValidationGroup="LoginForm" Display="Dynamic" />
                     </div>
 
                     <div class="form-group">
                         <label for="<%= PasswordTextBox.ClientID %>"><%: T("LoginPassword") %></label>
-                        <asp:TextBox ID="PasswordTextBox" runat="server" CssClass="form-control" TextMode="Password" />
+                        <asp:TextBox ID="PasswordTextBox" runat="server" CssClass="form-control" TextMode="Password" autocomplete="current-password" />
                         <asp:RequiredFieldValidator ID="PasswordRequiredValidator" runat="server" ControlToValidate="PasswordTextBox" CssClass="text-danger" ValidationGroup="LoginForm" Display="Dynamic" />
                     </div>
 
@@ -40,4 +40,61 @@
             </div>
         </div>
     </div>
+
+    <script type="text/javascript">
+        (function () {
+            var usernameId = '<%= UsernameTextBox.ClientID %>';
+            var passwordId = '<%= PasswordTextBox.ClientID %>';
+            var rememberMeId = '<%= RememberMeCheckBox.ClientID %>';
+            var signInButtonId = '<%= SignInButton.ClientID %>';
+            var errorPanelId = '<%= ErrorPanel.ClientID %>';
+            var autoSubmitAttempted = false;
+            var autoSubmitDelays = [150, 450, 900, 1500];
+
+            function hasVisibleError() {
+                var errorPanel = document.getElementById(errorPanelId);
+                return !!(errorPanel && errorPanel.offsetParent !== null);
+            }
+
+            function hasRememberedCredentials() {
+                var username = document.getElementById(usernameId);
+                var password = document.getElementById(passwordId);
+                var rememberMe = document.getElementById(rememberMeId);
+
+                return !!(username
+                    && password
+                    && rememberMe
+                    && rememberMe.checked
+                    && username.value
+                    && username.value.trim().length > 0
+                    && password.value
+                    && password.value.length > 0);
+            }
+
+            function tryAutoSubmit() {
+                var signInButton;
+
+                if (autoSubmitAttempted || hasVisibleError() || !hasRememberedCredentials()) {
+                    return;
+                }
+
+                signInButton = document.getElementById(signInButtonId);
+
+                if (!signInButton) {
+                    return;
+                }
+
+                autoSubmitAttempted = true;
+                signInButton.click();
+            }
+
+            window.addEventListener('load', function () {
+                var index;
+
+                for (index = 0; index < autoSubmitDelays.length; index++) {
+                    window.setTimeout(tryAutoSubmit, autoSubmitDelays[index]);
+                }
+            });
+        })();
+    </script>
 </asp:Content>
