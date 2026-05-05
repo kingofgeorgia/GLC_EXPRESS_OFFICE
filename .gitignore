@@ -400,3 +400,4 @@ nuget.exe
 iisexpress_amd64_en-US.msi
 Uploads/
 App_Data/*.db
+.DS_Store
