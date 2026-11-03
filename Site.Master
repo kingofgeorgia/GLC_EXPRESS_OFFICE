@@ -1,7 +1,6 @@
 ﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.master.cs" Inherits="GLC_EXPRESS.SiteMaster" %>
 
 <!DOCTYPE html>
-
 <html lang="<%= GetCurrentHtmlLanguage() %>">
 <head runat="server">
     <meta charset="utf-8" />
@@ -16,8 +15,9 @@
     <link href="<%= GetVersionedContentUrl("~/Content/Site.css") %>" rel="stylesheet" />
     <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
 
+<% if (IsHomePage()) { %><link href="<%= GetVersionedContentUrl("~/Content/home.css") %>" rel="stylesheet" /><% } %>
 </head>
-<body>
+<body class="<%= IsHomePage() ? "glc-home" : "" %>">
     <form runat="server">
         <asp:ScriptManager runat="server">
             <Scripts>
@@ -39,30 +39,68 @@
             </Scripts>
         </asp:ScriptManager>
 
-        <div class="navbar navbar-inverse navbar-fixed-top site-navbar">
+        <div class="navbar navbar-inverse navbar-fixed-top site-navbar <%= IsCrmPage() ? "workspace-navbar" : "" %>">
             <div class="<%= GetNavbarContainerCss() %>">
                 <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse" title="<%: T("NavToggleTitle") %>">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#siteNavigation" aria-controls="siteNavigation" aria-expanded="false" aria-label="Открыть меню" title="<%: T("NavToggleTitle") %>">
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand navbar-brand-logo" href="<%= GetHomeRootUrl() %>">
+                    <a class="navbar-brand navbar-brand-logo" href="<%= IsCrmPage() ? ResolveUrl("~/Operations") : GetHomeRootUrl() %>">
                         <asp:Image ID="NavbarLogoImage" runat="server" CssClass="site-navbar-logo" AlternateText="GLC EXPRESS" Visible="false" />
                         <asp:Literal ID="NavbarBrandTextLiteral" runat="server" Text="GLC EXPRESS" />
                     </a>
                 </div>
-                <div class="navbar-collapse collapse">
+                <div id="siteNavigation" class="navbar-collapse collapse">
+                    <% if (IsCrmPage()) { %>
+                    <ul class="nav navbar-nav workspace-main-nav" aria-label="Рабочие разделы">
+                        <li class="<%= Page is GLC_EXPRESS.Operations ? "active" : "" %>"><a href="<%= ResolveUrl("~/Operations") %>" <%= Page is GLC_EXPRESS.Operations ? "aria-current=\"page\"" : "" %>>Операции</a></li>
+                        <li class="<%= Page is GLC_EXPRESS.orders ? "active" : "" %>"><a href="<%= GetOrdersUrl() %>" <%= Page is GLC_EXPRESS.orders ? "aria-current=\"page\"" : "" %>>CRM</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right workspace-account-nav">
+                        <li><a href="<%= GetHomeRootUrl() %>">На сайт ↗</a></li>
+                        <li class="dropdown">
+                            <button type="button" class="workspace-profile dropdown-toggle" data-site-dropdown="true" aria-haspopup="true" aria-expanded="false"><span class="workspace-profile-name"><%: Context.User.Identity.Name %></span> <span class="caret"></span></button>
+                            <ul class="dropdown-menu">
+                                <li><a href="<%= GetCrmTabUrl("settings") %>">Настройки CRM</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a href="<%= GetLogoutUrl() %>">Выйти</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <% } else { %>
                     <ul class="nav navbar-nav site-main-nav">
-                        <li><a href="<%= GetHomeSectionUrl("home") %>"><%: T("NavHome") %></a></li>
-                        <li><a href="<%= GetHomeSectionUrl("turnkey-order") %>"><%: T("NavTurnkeyOrder") %></a></li>
-                        <li><a href="<%= GetHomeSectionUrl("delivery") %>"><%: T("NavDelivery") %></a></li>
-                        <li><a href="<%= GetHomeSectionUrl("auction-center") %>"><%: T("NavAuctionCenter") %></a></li>
-                        <li><a href="<%= GetHomeSectionUrl("advantages") %>"><%: T("NavAdvantages") %></a></li>
-                        <li><a href="<%= GetHomeSectionUrl("about") %>"><%: T("NavAbout") %></a></li>
-                        <li><a href="<%= GetHomeSectionUrl("partners") %>"><%: T("NavPartners") %></a></li>
-                        <li><a href="<%= GetHomeSectionUrl("reviews") %>"><%: T("NavReviews") %></a></li>
+                        <li class="dropdown">
+                            <a href="<%= GetHomeSectionUrl("directions") %>" class="dropdown-toggle" data-site-dropdown="true" aria-haspopup="true" aria-expanded="false"><%: T("NavServicesGroup") %> <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="<%= GetHomeSectionUrl("directions") %>"><%: T("NavDirections") %></a></li>
+                                <li><a href="<%= GetHomeSectionUrl("cargo-types") %>"><%: T("NavCategories") %></a></li>
+                                <li><a href="<%= GetHomeSectionUrl("auction-center") %>"><%: T("NavAuctionCenter") %></a></li>
+                                <li><a href="<%= GetHomeSectionUrl("delivery") %>"><%: T("NavDelivery") %></a></li>
+                                <li><a href="<%= GetHomeSectionUrl("repair") %>"><%: T("NavRepair") %></a></li>
+                            </ul>
+                        </li>
+                        <li><a href="<%= GetHomeSectionUrl("process") %>"><%: T("NavProcess") %></a></li>
+                        <li class="dropdown">
+                            <a href="<%= GetHomeSectionUrl("partners") %>" class="dropdown-toggle" data-site-dropdown="true" aria-haspopup="true" aria-expanded="false"><%: T("NavPartnerGroup") %> <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="<%= GetHomeSectionUrl("partners") %>"><%: T("NavPartners") %></a></li>
+                                <li><a href="<%= GetHomeSectionUrl("partnership") %>"><%: T("NavPartnership") %></a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a href="<%= GetHomeSectionUrl("about") %>" class="dropdown-toggle" data-site-dropdown="true" aria-haspopup="true" aria-expanded="false"><%: T("NavCompanyGroup") %> <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="<%= GetHomeSectionUrl("advantages") %>"><%: T("NavAdvantages") %></a></li>
+                                <li><a href="<%= GetHomeSectionUrl("about") %>"><%: T("NavAbout") %></a></li>
+                                <li><a href="<%= GetHomeSectionUrl("reviews") %>"><%: T("NavReviews") %></a></li>
+                            </ul>
+                        </li>
                         <li><a href="<%= GetHomeSectionUrl("contacts") %>"><%: T("NavContacts") %></a></li>
+                        <% if (ShouldShowMileOnAutoInMenu()) { %>
+                        <li class="site-nav-cta"><a href="<%= GetMileOnAutoCatalogUrl() %>"><%: T("NavCalculator") %></a></li>
+                        <% } %>
                     </ul>
                     <% if (ShouldShowLanguageSwitcher()) { %>
                         <ul class="nav navbar-nav navbar-right site-language-nav">
@@ -73,13 +111,18 @@
                     <% } %>
                     <ul class="nav navbar-nav navbar-right site-account-nav">
                         <% if (Request.IsAuthenticated) { %>
-                            <li><a href="<%= GetOrdersUrl() %>"><%: T("AuthMyAccount") %></a></li>
+                            <li class="dropdown"><a href="<%= GetOrdersUrl() %>" class="dropdown-toggle" data-site-dropdown="true" aria-haspopup="true" aria-expanded="false"><%: T("AuthMyAccount") %> <span class="caret"></span></a><ul class="dropdown-menu"><li><a href="<%= GetOrdersUrl() %>"><%: T("AuthMyAccount") %></a></li><li><a href="<%= GetCrmTabUrl("settings") %>"><%: T("AuthSettings") %></a></li><li><a href="<%= GetLogoutUrl() %>"><%: T("AuthLogout") %></a></li></ul></li>
+                            <li><a href="<%= ResolveUrl("~/Operations") %>">Operations</a></li>
                             <li><a href="<%= GetCrmTabUrl("settings") %>"><%: T("AuthSettings") %></a></li>
                             <li><a href="<%= GetLogoutUrl() %>"><%: T("AuthLogout") %></a></li>
                         <% } else { %>
                             <li><a href="<%= GetLoginUrl() %>"><%: T("AuthSignIn") %></a></li>
+                            <% if (ShouldShowPublicRegistrationLink()) { %>
+                            <li><a href="<%= GetRegisterUrl() %>"><%: T("NavRegister") %></a></li>
+                            <% } %>
                         <% } %>
                     </ul>
+                    <% } %>
                 </div>
             </div>
         </div>
@@ -137,6 +180,57 @@
                         }
                     });
                 }
+            })();
+        </script>
+
+        <script type="text/javascript">
+            (function () {
+                function closeDropdown(dropdown) {
+                    if (!dropdown || !dropdown.classList.contains('open')) {
+                        return;
+                    }
+
+                    dropdown.classList.remove('open');
+                    var toggle = dropdown.querySelector('[data-site-dropdown="true"]');
+                    if (toggle) {
+                        toggle.setAttribute('aria-expanded', 'false');
+                    }
+                }
+
+                document.addEventListener('click', function (event) {
+                    var toggle = event.target.closest('[data-site-dropdown="true"]');
+                    var openDropdowns = document.querySelectorAll('.dropdown.open');
+
+                    for (var index = 0; index < openDropdowns.length; index++) {
+                        if (!toggle || openDropdowns[index] !== toggle.closest('.dropdown')) {
+                            closeDropdown(openDropdowns[index]);
+                        }
+                    }
+
+                    if (!toggle) {
+                        return;
+                    }
+
+                    event.preventDefault();
+                    var dropdown = toggle.closest('.dropdown');
+                    if (!dropdown) {
+                        return;
+                    }
+
+                    var isOpen = dropdown.classList.toggle('open');
+                    toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+                });
+
+                document.addEventListener('keydown', function (event) {
+                    if (event.key !== 'Escape') {
+                        return;
+                    }
+
+                    var openDropdowns = document.querySelectorAll('.dropdown.open');
+                    for (var index = 0; index < openDropdowns.length; index++) {
+                        closeDropdown(openDropdowns[index]);
+                    }
+                });
             })();
         </script>
 

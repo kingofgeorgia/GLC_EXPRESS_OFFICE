@@ -10,6 +10,17 @@ namespace GLC_EXPRESS.Services
     {
         private static readonly object SyncRoot = new object();
 
+        // Keep read/validate/write together for Operations commands.
+        public static void Update(Action<CrmDataStore> change)
+        {
+            lock (SyncRoot)
+            {
+                var data = Load();
+                change(data);
+                Save(data);
+            }
+        }
+
         public static CrmDataStore Load()
         {
             lock (SyncRoot)

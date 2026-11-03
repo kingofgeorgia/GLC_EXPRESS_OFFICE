@@ -18,6 +18,8 @@ namespace GLC_EXPRESS.Models
             Id = "crm";
             CompanyName = "GLC EXPRESS";
             DefaultCrmTab = "trips";
+            ShowCalculatorInMenu = true;
+            AllowPublicRegistration = true;
             AllowedCrmRoles = new List<string>();
             TripStatuses = new List<string>();
             AllowedDocumentExtensions = new List<string>();
@@ -81,6 +83,10 @@ namespace GLC_EXPRESS.Models
 
         public bool ValidatePrepaymentAgainstFreight { get; set; }
 
+        public bool ShowCalculatorInMenu { get; set; }
+
+        public bool AllowPublicRegistration { get; set; }
+
         public DateTime UpdatedAtUtc { get; set; }
     }
 
@@ -89,6 +95,8 @@ namespace GLC_EXPRESS.Models
         public CrmSettingsExchangeRecord()
         {
             SchemaVersion = 2;
+            ShowCalculatorInMenu = true;
+            AllowPublicRegistration = true;
             AllowedCrmRoles = new List<string>();
             TripStatuses = new List<string>();
             AllowedDocumentExtensions = new List<string>();
@@ -148,5 +156,9 @@ namespace GLC_EXPRESS.Models
         public bool RequireUniqueTripNumbers { get; set; }
 
         public bool ValidatePrepaymentAgainstFreight { get; set; }
+
+        public bool ShowCalculatorInMenu { get; set; }
+
+        public bool AllowPublicRegistration { get; set; }
     }
 }

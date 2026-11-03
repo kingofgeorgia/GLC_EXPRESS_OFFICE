@@ -106,6 +106,8 @@ namespace GLC_EXPRESS.Services
                 if (!string.Equals(existingUser.PasswordHash, configuredUser.PasswordHash, StringComparison.OrdinalIgnoreCase))
                 {
                     existingUser.PasswordHash = configuredUser.PasswordHash;
+                    existingUser.PasswordSalt = string.Empty;
+                    existingUser.PasswordIterations = 0;
                     wasUpdated = true;
                 }
 

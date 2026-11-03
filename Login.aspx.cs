@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Web;
 using System.Web.Security;
 using System.Web.UI;
@@ -40,6 +41,17 @@ namespace GLC_EXPRESS
             {
                 ErrorPanel.Visible = true;
                 ErrorLiteral.Text = T("LoginInvalidCredentials");
+                return;
+            }
+
+            var allowedRoles = CrmSettingsService.GetCurrent().AllowedCrmRoles ?? new System.Collections.Generic.List<string>();
+            var userRoles = AuthService.GetRolesForUser(user == null ? UsernameTextBox.Text : user.Username);
+            var isPublicClientAccount = userRoles.Length == 1
+                && string.Equals(userRoles[0], AuthService.PublicClientRole, StringComparison.OrdinalIgnoreCase);
+            if (isPublicClientAccount || !userRoles.Any(userRole => allowedRoles.Any(allowedRole => string.Equals(userRole, allowedRole, StringComparison.OrdinalIgnoreCase))))
+            {
+                ErrorPanel.Visible = true;
+                ErrorLiteral.Text = T("LoginNoCrmAccess");
                 return;
             }
 

@@ -1,0 +1,8 @@
+Partner logo sources (downloaded without visual alteration):
+Copart: embedded SVG in https://www.copart.co.uk/
+IAA: https://www.iaai.com/prod/images/IAA_Logo_R_RGB-sm-vertical.png
+Manheim: https://site.manheim.com/wp-content/uploads/sites/2/2022/12/manheim-logo.svg
+AUTOPAPA: https://autopapa.ge/images/logo.png
+Port of Poti / APM Terminals: https://commons.wikimedia.org/wiki/File:APMT_Tag_Ver_ColorPos_GIF.png (public-domain text logo)
+Port of Batumi: https://batumiport.com/img/logo.svg
+MSC, Maersk, CMA CGM: shipping-line logos published by APM Terminals Poti at https://www.apmterminals.com/en/poti (cms-cd.apmterminals.com/poti/-/media/sitewide/Shipping-lines-logos/).

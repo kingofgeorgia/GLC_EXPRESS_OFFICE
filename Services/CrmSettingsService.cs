@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using GLC_EXPRESS.Models;
@@ -13,12 +13,12 @@ namespace GLC_EXPRESS.Services
         private const string DefaultCrmTab = "trips";
 
         private static readonly string[] DefaultAllowedCrmRoles = { "Admin", "Manager", "Dispatcher" };
-        private static readonly string[] DefaultTripStatuses = { "Новый", "В работе", "Завершен", "Отложен" };
+        private static readonly string[] DefaultTripStatuses = { "Ожидает загрузку", "Загружен", "В пути", "На разгрузке", "Окончен" };
         private static readonly string[] DefaultDocumentExtensions = { ".pdf", ".png", ".jpg", ".jpeg", ".gif", ".webp" };
         private static readonly string[] DefaultLogoExtensions = { ".png", ".jpg", ".jpeg", ".gif", ".webp" };
-        private static readonly string[] DefaultHomePartnerNames = { "Copart", "IAAI", "Manheim", "AUTOPAPA", "Port of Poti", "Port of Batumi" };
-        private static readonly string[] DefaultHomePartnerNamesEn = { "Copart", "IAAI", "Manheim", "AUTOPAPA", "Port of Poti", "Port of Batumi" };
-        private static readonly string[] DefaultHomePartnerNamesGe = { "Copart", "IAAI", "Manheim", "AUTOPAPA", "ფოთის პორტი", "ბათუმის პორტი" };
+        private static readonly string[] DefaultHomePartnerNames = { "Copart", "IAAI", "Manheim", "AUTOPAPA", "Port of Poti", "Port of Batumi", "MSC", "Maersk", "CMA CGM" };
+        private static readonly string[] DefaultHomePartnerNamesEn = { "Copart", "IAAI", "Manheim", "AUTOPAPA", "Port of Poti", "Port of Batumi", "MSC", "Maersk", "CMA CGM" };
+        private static readonly string[] DefaultHomePartnerNamesGe = { "Copart", "IAAI", "Manheim", "AUTOPAPA", "ფოთის პორტი", "ბათუმის პორტი", "MSC", "Maersk", "CMA CGM" };
         private static readonly string[] AllowedTabs = { "trips", "drivers", "fleet", "cars", "clients", "inquiries", "settings" };
         private const string DefaultHomeContactAddress = "AUTOPAPA, Рустави, Грузия";
         private const string DefaultHomeContactAddressEn = "AUTOPAPA, Rustavi, Georgia";
@@ -107,7 +107,9 @@ namespace GLC_EXPRESS.Services
                     HomeContactWorkingHoursGe = exchangeRecord.HomeContactWorkingHoursGe,
                     HomeContactWhatsAppUrl = exchangeRecord.HomeContactWhatsAppUrl,
                     RequireUniqueTripNumbers = exchangeRecord.RequireUniqueTripNumbers,
-                    ValidatePrepaymentAgainstFreight = exchangeRecord.ValidatePrepaymentAgainstFreight
+                    ValidatePrepaymentAgainstFreight = exchangeRecord.ValidatePrepaymentAgainstFreight,
+                    ShowCalculatorInMenu = exchangeRecord.ShowCalculatorInMenu,
+                    AllowPublicRegistration = exchangeRecord.AllowPublicRegistration
                 });
             }
             catch (JsonException exception)
@@ -144,6 +146,8 @@ namespace GLC_EXPRESS.Services
                 HomeContactWhatsAppUrl = candidate == null ? string.Empty : candidate.HomeContactWhatsAppUrl,
                 RequireUniqueTripNumbers = candidate != null && candidate.RequireUniqueTripNumbers,
                 ValidatePrepaymentAgainstFreight = candidate != null && candidate.ValidatePrepaymentAgainstFreight,
+                ShowCalculatorInMenu = candidate == null || candidate.ShowCalculatorInMenu,
+                AllowPublicRegistration = candidate == null || candidate.AllowPublicRegistration,
                 UpdatedAtUtc = candidate == null ? DateTime.UtcNow : candidate.UpdatedAtUtc
             };
 
@@ -196,7 +200,7 @@ namespace GLC_EXPRESS.Services
             settings.Id = SettingsId;
             settings.CompanyName = string.IsNullOrWhiteSpace(settings.CompanyName) ? DefaultCompanyName : settings.CompanyName.Trim();
             settings.AllowedCrmRoles = NormalizeTextList(settings.AllowedCrmRoles, DefaultAllowedCrmRoles);
-            settings.TripStatuses = NormalizeTextList(settings.TripStatuses, DefaultTripStatuses);
+            settings.TripStatuses = new List<string>(DefaultTripStatuses);
             settings.AllowedDocumentExtensions = NormalizeExtensions(settings.AllowedDocumentExtensions, DefaultDocumentExtensions, false);
             settings.AllowedLogoExtensions = NormalizeExtensions(settings.AllowedLogoExtensions, DefaultLogoExtensions, true);
             settings.HomePartnerNames = NormalizeTextList(settings.HomePartnerNames, DefaultHomePartnerNames);
@@ -246,8 +250,26 @@ namespace GLC_EXPRESS.Services
                 HomeContactWorkingHoursGe = normalizedSettings.HomeContactWorkingHoursGe,
                 HomeContactWhatsAppUrl = normalizedSettings.HomeContactWhatsAppUrl,
                 RequireUniqueTripNumbers = normalizedSettings.RequireUniqueTripNumbers,
-                ValidatePrepaymentAgainstFreight = normalizedSettings.ValidatePrepaymentAgainstFreight
+                ValidatePrepaymentAgainstFreight = normalizedSettings.ValidatePrepaymentAgainstFreight,
+                ShowCalculatorInMenu = normalizedSettings.ShowCalculatorInMenu,
+                AllowPublicRegistration = normalizedSettings.AllowPublicRegistration
             };
+        }
+
+        public static bool IsPublicRegistrationEnabled()
+        {
+            try
+            {
+                using (var database = AppDatabase.Open())
+                {
+                    var settings = database.GetCollection<CrmSettingsRecord>("crm_settings").FindById(SettingsId);
+                    return settings == null || Normalize(settings).AllowPublicRegistration;
+                }
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         public static List<string> GetLocalizedHomePartnerNames(CrmSettingsRecord settings, string languageCode)

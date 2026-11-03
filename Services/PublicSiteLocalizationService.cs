@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Threading;
@@ -317,6 +317,10 @@ namespace GLC_EXPRESS.Services
             var texts = new Dictionary<string, LocalizedText>(StringComparer.OrdinalIgnoreCase);
 
             texts["NavToggleTitle"] = new LocalizedText("Дополнительные опции", "More options", "დამატებითი პარამეტრები");
+            texts["NavServicesGroup"] = new LocalizedText("Услуги", "Services", "სერვისები");
+            texts["NavPartnerGroup"] = new LocalizedText("Партнёрам", "Partners", "პარტნიორებს");
+            texts["NavCompanyGroup"] = new LocalizedText("О компании", "About", "კომპანიის შესახებ");
+            texts["NavCalculator"] = new LocalizedText("Калькулятор", "Calculator", "კალკულატორი");
             texts["NavHome"] = new LocalizedText("Главная", "Home", "მთავარი");
             texts["NavTurnkeyOrder"] = new LocalizedText("Заказ автомобиля", "Car order", "ავტომობილის შეკვეთა");
             texts["NavDelivery"] = new LocalizedText("Доставка", "Delivery", "მიწოდება");
@@ -325,6 +329,7 @@ namespace GLC_EXPRESS.Services
             texts["NavAbout"] = new LocalizedText("О нас", "About us", "ჩვენ შესახებ");
             texts["NavPartners"] = new LocalizedText("Наши партнёры", "Partners", "პარტნიორები");
             texts["NavReviews"] = new LocalizedText("Отзывы", "Reviews", "შეფასებები");
+            texts["NavMileONAuto"] = new LocalizedText("MileON Auto", "MileON Auto", "MileON Auto");
             texts["NavContacts"] = new LocalizedText("Контакты", "Contacts", "კონტაქტები");
             texts["AuthMyAccount"] = new LocalizedText("Мой аккаунт", "My Account", "ჩემი ანგარიში");
             texts["AuthSettings"] = new LocalizedText("Настройки", "Settings", "პარამეტრები");
@@ -337,6 +342,28 @@ namespace GLC_EXPRESS.Services
             texts["LoginUsernameRequired"] = new LocalizedText("Укажите логин.", "Username is required.", "მომხმარებლის სახელი სავალდებულოა.");
             texts["LoginPasswordRequired"] = new LocalizedText("Укажите пароль.", "Password is required.", "პაროლი სავალდებულოა.");
             texts["LoginInvalidCredentials"] = new LocalizedText("Неверный логин или пароль.", "Invalid username or password.", "მომხმარებლის სახელი ან პაროლი არასწორია.");
+            texts["LoginNoCrmAccess"] = new LocalizedText("У этой учетной записи нет доступа к CRM. Зарегистрированные клиенты могут пользоваться сайтом, но не могут входить в CRM.", "This account does not have CRM access. Registered customers can use the website but cannot sign in to the CRM.", "ამ ანგარიშს CRM-ზე წვდომა არ აქვს. რეგისტრირებულ მომხმარებლებს შეუძლიათ საიტით სარგებლობა, მაგრამ CRM-ში შესვლა არ შეუძლიათ.");
+            texts["NavRegister"] = new LocalizedText("Регистрация", "Register", "რეგისტრაცია");
+            texts["RegisterTitle"] = new LocalizedText("Регистрация клиента", "Customer registration", "მომხმარებლის რეგისტრაცია");
+            texts["RegisterLead"] = new LocalizedText("Создайте учетную запись клиента. Она не предоставляет доступ к CRM.", "Create a customer account. It does not provide access to the CRM.", "შექმენით მომხმარებლის ანგარიში. ის CRM-ზე წვდომას არ იძლევა.");
+            texts["RegisterFullName"] = new LocalizedText("Имя и фамилия", "Full name", "სახელი და გვარი");
+            texts["RegisterEmail"] = new LocalizedText("Email", "Email", "ელფოსტა");
+            texts["RegisterPhone"] = new LocalizedText("Телефон", "Phone", "ტელეფონი");
+            texts["RegisterPassword"] = new LocalizedText("Пароль (не менее 10 символов)", "Password (at least 10 characters)", "პაროლი (მინიმუმ 10 სიმბოლო)");
+            texts["RegisterConfirmPassword"] = new LocalizedText("Повторите пароль", "Confirm password", "გაიმეორეთ პაროლი");
+            texts["RegisterConsent"] = new LocalizedText("Я согласен на обработку персональных данных согласно Политике конфиденциальности.", "I agree to the processing of my personal data under the Privacy Policy.", "ვეთანხმები ჩემი პერსონალური მონაცემების დამუშავებას კონფიდენციალურობის პოლიტიკის შესაბამისად.");
+            texts["RegisterSubmit"] = new LocalizedText("Создать учетную запись", "Create account", "ანგარიშის შექმნა");
+            texts["RegisterDisabled"] = new LocalizedText("Публичная регистрация сейчас отключена.", "Public registration is currently disabled.", "საჯარო რეგისტრაცია ამჟამად გამორთულია.");
+            texts["RegisterSuccess"] = new LocalizedText("Регистрация завершена. Данные добавлены в список клиентов. Эта учетная запись не дает доступа к CRM.", "Registration is complete. Your details were added to the customer list. This account does not grant CRM access.", "რეგისტრაცია დასრულებულია. თქვენი მონაცემები დაემატა მომხმარებლების სიას. ეს ანგარიში CRM-ზე წვდომას არ იძლევა.");
+            texts["RegisterError"] = new LocalizedText("Не удалось завершить регистрацию. Проверьте данные и попробуйте снова.", "Registration could not be completed. Check your details and try again.", "რეგისტრაცია ვერ დასრულდა. შეამოწმეთ მონაცემები და სცადეთ თავიდან.");
+            texts["RegisterEmailExists"] = new LocalizedText("Этот email уже зарегистрирован.", "This email is already registered.", "ეს ელფოსტა უკვე რეგისტრირებულია.");
+            texts["RegisterNameRequired"] = new LocalizedText("Укажите имя и фамилию.", "Enter your full name.", "შეიყვანეთ სახელი და გვარი.");
+            texts["RegisterEmailRequired"] = new LocalizedText("Укажите email.", "Enter your email.", "შეიყვანეთ ელფოსტა.");
+            texts["RegisterEmailInvalid"] = new LocalizedText("Укажите корректный email.", "Enter a valid email address.", "შეიყვანეთ სწორი ელფოსტის მისამართი.");
+            texts["RegisterPasswordRequired"] = new LocalizedText("Укажите пароль.", "Enter a password.", "შეიყვანეთ პაროლი.");
+            texts["RegisterPasswordConfirmRequired"] = new LocalizedText("Повторите пароль.", "Confirm your password.", "გაიმეორეთ პაროლი.");
+            texts["RegisterPasswordMismatch"] = new LocalizedText("Пароли не совпадают.", "The passwords do not match.", "პაროლები არ ემთხვევა.");
+            texts["RegisterConsentRequired"] = new LocalizedText("Для регистрации необходимо согласиться с обработкой персональных данных.", "You must agree to personal data processing to register.", "რეგისტრაციისთვის საჭიროა პერსონალური მონაცემების დამუშავებაზე თანხმობა.");
             texts["AccessDeniedTitle"] = new LocalizedText("Доступ запрещен", "Access denied", "წვდომა აკრძალულია");
             texts["AccessDeniedLead"] = new LocalizedText("У вашей учетной записи пока нет прав на работу с CRM.", "Your account does not currently have permission to use the CRM.", "თქვენს ანგარიშს ამ დროისთვის CRM-ზე წვდომის უფლება არ აქვს.");
             texts["AccessDeniedRolesLead"] = new LocalizedText("Сейчас для доступа нужны роли: {0}.", "The following roles are currently required for access: {0}.", "წვდომისთვის ამჟამად საჭიროა შემდეგი როლები: {0}.");
@@ -348,6 +375,11 @@ namespace GLC_EXPRESS.Services
             texts["CookieDecline"] = new LocalizedText("Отклонить", "Decline", "უარყოფა");
             texts["HomePageTitle"] = new LocalizedText("GLC Express | Аукционы и доставка авто из США", "GLC Express | Car auctions and delivery from the USA", "GLC Express | ავტო აუქციონები და ჩამოტანა აშშ-დან");
             texts["HomeHeroEyebrow"] = new LocalizedText("USA & Canada Auto Auctions", "USA & Canada Auto Auctions", "აშშ და კანადის ავტო აუქციონები");
+            texts["NavDirections"] = new LocalizedText("Направления", "Origins", "მიმართულებები");
+            texts["NavCategories"] = new LocalizedText("Автомобили", "Vehicles", "ავტომობილები");
+            texts["NavProcess"] = new LocalizedText("Как мы работаем", "How it works", "როგორ ვმუშაობთ");
+            texts["NavRepair"] = new LocalizedText("Ремонт", "Repair", "შეკეთება");
+            texts["NavPartnership"] = new LocalizedText("Стать партнёром", "Become a partner", "გახდი პარტნიორი");
             texts["HomeHeroTitle"] = new LocalizedText("Покупка, доставка и восстановление автомобилей из США под ключ", "Turnkey purchase, delivery, and restoration of cars from the USA", "აშშ-დან ავტომობილების შეძენა, ჩამოტანა და აღდგენა სრული სერვისით");
             texts["HomeHeroLead"] = new LocalizedText("GLC Express сопровождает клиента на каждом этапе: от аналитики лота и торгов на Copart, Manheim и IAAI до отправки в Поти или Батуми, ремонта и передачи автомобиля владельцу.", "GLC Express supports the client at every stage: from lot analysis and bidding on Copart, Manheim, and IAAI to shipment to Poti or Batumi, repairs, and handover to the owner.", "GLC Express კლიენტს ყველა ეტაპზე ახლავს: Copart, Manheim და IAAI-ზე ლოტის ანალიზიდან და ვაჭრობიდან ფოთში ან ბათუმში გადაზიდვამდე, შეკეთებამდე და მფლობელისთვის გადაცემამდე.");
             texts["HomeHeroPrimaryCta"] = new LocalizedText("Заказ автомобиля", "Order a car", "ავტომობილის შეკვეთა");

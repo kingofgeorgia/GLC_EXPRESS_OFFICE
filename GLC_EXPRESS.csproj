@@ -124,6 +124,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Login.aspx" />
+    <Content Include="Register.aspx" />
     <Content Include="Logout.aspx" />
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -135,6 +136,9 @@
     <Content Include="Content\bootstrap-theme.css.map" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="orders.aspx" />
+    <Content Include="Operations.aspx" />
+    <Content Include="Content\operations.css" />
+    <Content Include="Scripts\operations.js" />
     <Content Include="PrivacyPolicy.aspx" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -219,6 +223,13 @@
     <Compile Include="Login.aspx.designer.cs">
       <DependentUpon>Login.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Register.aspx.cs">
+      <DependentUpon>Register.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Register.aspx.designer.cs">
+      <DependentUpon>Register.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Models\BrandingModels.cs" />
     <Compile Include="Models\FileAccessModels.cs" />
     <Compile Include="Models\AuthModels.cs" />
@@ -232,8 +243,15 @@
     <Compile Include="Logout.aspx.designer.cs">
       <DependentUpon>Logout.aspx</DependentUpon>
     </Compile>
+    <Compile Include="orders.CarForm.cs" />
+    <Compile Include="Services\CarForwarderDirectoryService.cs" />
+    <Content Include="Scripts\car-editor.js" />
     <Compile Include="orders.aspx.cs">
       <DependentUpon>orders.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Operations.aspx.cs">
+      <DependentUpon>Operations.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="orders.aspx.designer.cs">
@@ -331,4 +349,41 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+
+  <ItemGroup>
+    <Compile Include="Controls\Home\HomeSection.cs" />
+    <Compile Include="Models\HomeTrackingPreviewModels.cs" />
+    <Compile Include="Services\HomeTrackingPreviewService.cs" />
+    <Content Include="Content\images\tesla-model-y.png" />
+    <Content Include="Controls\Home\Hero.ascx" />
+    <Content Include="Controls\Home\Calculator.ascx" />
+    <Content Include="Controls\Home\TrackingCard.ascx" />
+    <Content Include="Controls\Home\KpiStats.ascx" />
+    <Content Include="Controls\Home\ProcessTimeline.ascx" />
+    <Content Include="Controls\Home\VehicleCategories.ascx" />
+    <Content Include="Controls\Home\ShippingOrigins.ascx" />
+    <Content Include="Content\images\categories\sedan.png" />
+    <Content Include="Content\images\categories\suv.png" />
+    <Content Include="Content\images\categories\pickup.png" />
+    <Content Include="Content\images\categories\van.png" />
+    <Content Include="Content\images\categories\motorcycle.png" />
+    <Content Include="Content\images\categories\exclusive.png" />
+    <Content Include="Content\images\categories\boat.png" />
+    <Content Include="Content\images\categories\buggy.png" />
+    <Compile Include="Services\PartnerLogoService.cs" />
+    <Content Include="Scripts\partners-carousel.js" />
+    <Content Include="Content\images\partners\autopapa.png" />
+    <Content Include="Content\images\partners\batumi.svg" />
+    <Content Include="Content\images\partners\cma-cgm.png" />
+    <Content Include="Content\images\partners\copart.svg" />
+    <Content Include="Content\images\partners\iaai.png" />
+    <Content Include="Content\images\partners\maersk.png" />
+    <Content Include="Content\images\partners\manheim.svg" />
+    <Content Include="Content\images\partners\msc.jpg" />
+    <Content Include="Content\images\partners\poti.png" />
+    <Content Include="Content\home.css" />
+    <Content Include="Content\images\home-icons.svg" />
+    <Content Include="Content\images\logistics-hero.png" />
+    <Content Include="Scripts\home.js" />
+  </ItemGroup>
 </Project>

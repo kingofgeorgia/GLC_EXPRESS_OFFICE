@@ -124,7 +124,7 @@ namespace GLC_EXPRESS
             var settings = CurrentCrmSettings;
             var languageCode = PublicSiteLocalizationService.GetCurrentLanguageCode();
 
-            HomePartnersRepeater.DataSource = CrmSettingsService.GetLocalizedHomePartnerNames(settings, languageCode);
+            HomePartnersRepeater.DataSource = PartnerLogoService.GetCards(CrmSettingsService.GetLocalizedHomePartnerNames(settings, languageCode));
             HomePartnersRepeater.DataBind();
 
             HomeReviewsRepeater.DataSource = CrmSettingsService.GetLocalizedHomeReviews(settings, languageCode);

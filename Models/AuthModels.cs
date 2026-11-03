@@ -19,7 +19,15 @@ namespace GLC_EXPRESS.Models
 
         public string UsernameNormalized { get; set; }
 
+        public string FullName { get; set; }
+
+        public string Email { get; set; }
+
         public string PasswordHash { get; set; }
+
+        public string PasswordSalt { get; set; }
+
+        public int PasswordIterations { get; set; }
 
         public List<string> Roles { get; set; }
 

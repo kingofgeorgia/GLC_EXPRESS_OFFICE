@@ -60,6 +60,8 @@ namespace GLC_EXPRESS
             if (!IsPostBack)
             {
                 ActiveTab = ResolveDefaultCrmTab();
+                if (ActiveTab == "cars" && !string.IsNullOrWhiteSpace(Request.QueryString["carId"]))
+                    SelectedCarId = Request.QueryString["carId"];
                 BindAll();
                 return;
             }
@@ -156,7 +158,7 @@ namespace GLC_EXPRESS
             existingTrip.DriverId = driver.Id;
             existingTrip.DriverName = driver.FullName;
             existingTrip.StartDate = startDate.ToString("yyyy-MM-dd");
-            existingTrip.EndDate = endDate.ToString("yyyy-MM-dd");
+            existingTrip.EndDate = endDate == DateTime.MinValue ? "" : endDate.ToString("yyyy-MM-dd");
             existingTrip.Freight = TripsFreightTextBox.Text.Trim();
             existingTrip.Prepayment = TripsPrepaymentTextBox.Text.Trim();
 
@@ -655,7 +657,9 @@ namespace GLC_EXPRESS
                 HomeContactWorkingHoursGe = existingSettings.HomeContactWorkingHoursGe,
                 HomeContactWhatsAppUrl = SettingsHomeContactWhatsAppUrlTextBox.Text.Trim(),
                 RequireUniqueTripNumbers = SettingsRequireUniqueTripNumbersCheckBox.Checked,
-                ValidatePrepaymentAgainstFreight = SettingsValidatePrepaymentCheckBox.Checked
+                ValidatePrepaymentAgainstFreight = SettingsValidatePrepaymentCheckBox.Checked,
+                ShowCalculatorInMenu = SettingsShowCalculatorInMenuCheckBox.Checked,
+                AllowPublicRegistration = SettingsAllowPublicRegistrationCheckBox.Checked
             });
 
             ApplyLocalizedHomeContentInputs(candidateSettings, homeContentLanguage);
@@ -695,6 +699,48 @@ namespace GLC_EXPRESS
         {
             ActiveTab = "settings";
             SettingsInputsNeedRefresh = true;
+            BindAll();
+        }
+
+        protected void SettingsShowCalculatorInMenuCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            ActiveTab = "settings";
+
+            var settings = CurrentCrmSettings;
+            settings.ShowCalculatorInMenu = Request != null
+                && SettingsShowCalculatorInMenuCheckBox != null
+                && Request.Form[SettingsShowCalculatorInMenuCheckBox.UniqueID] != null;
+
+            var savedSettings = CrmSettingsService.Save(settings);
+            ResetCrmSettings();
+            SettingsShowCalculatorInMenuCheckBox.Checked = savedSettings.ShowCalculatorInMenu;
+            SettingsInputsNeedRefresh = false;
+            ShowMessage(
+                savedSettings.ShowCalculatorInMenu
+                    ? "Ссылка MileON Auto показана в публичном меню."
+                    : "Ссылка MileON Auto скрыта из публичного меню.",
+                "success");
+            BindAll();
+        }
+
+        protected void SettingsAllowPublicRegistrationCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            ActiveTab = "settings";
+
+            var settings = CurrentCrmSettings;
+            settings.AllowPublicRegistration = Request != null
+                && SettingsAllowPublicRegistrationCheckBox != null
+                && Request.Form[SettingsAllowPublicRegistrationCheckBox.UniqueID] != null;
+
+            var savedSettings = CrmSettingsService.Save(settings);
+            ResetCrmSettings();
+            SettingsAllowPublicRegistrationCheckBox.Checked = savedSettings.AllowPublicRegistration;
+            SettingsInputsNeedRefresh = false;
+            ShowMessage(
+                savedSettings.AllowPublicRegistration
+                    ? "Публичная регистрация клиентов включена."
+                    : "Публичная регистрация клиентов отключена.",
+                "success");
             BindAll();
         }
 
@@ -1247,20 +1293,21 @@ namespace GLC_EXPRESS
             var data = CrmRepository.Load();
             var selectedCar = FindById(data.Cars, SelectedCarId);
             var newTripNumber = NormalizeCrmText(GetSelectedValue(CarsDetailTripDropDownList));
-            var newForwarder = NormalizeCrmText(CarsDetailForwarderTextBox.Text);
-            var newDealer = NormalizeCrmText(CarsDetailDealerTextBox.Text);
-            var newStatus = NormalizeCrmText(CarsDetailStatusTextBox.Text);
+            var newForwarder = NormalizeCrmText(CarsDetailForwarderDropDownList.SelectedValue == "__new__" ? CarsNewForwarderTextBox.Text : CarsDetailForwarderDropDownList.SelectedValue);
+            var newClientId = CarsDetailClientDropDownList.SelectedValue;
+            var newClient = data.Clients.FirstOrDefault(item => item.Id == newClientId);
+            var newDealer = newClient == null ? "" : newClient.Name;
+            var newStatus = NormalizeCrmText(CarsDetailStatusDropDownList.SelectedValue);
             var newStartPrice = NormalizeCrmText(CarsDetailStartPriceTextBox.Text);
-            var newInvoice = NormalizeCrmText(CarsDetailInvoiceTextBox.Text);
-            var newYear = NormalizeCrmText(CarsDetailYearTextBox.Text);
+            var newYear = NormalizeCrmText(CarsDetailYearDropDownList.SelectedValue);
             var newBrand = NormalizeCrmText(CarsDetailBrandTextBox.Text);
             var newModel = NormalizeCrmText(CarsDetailModelTextBox.Text);
             var newVin = NormalizeCrmText(CarsDetailVinTextBox.Text);
             var newLocation = NormalizeCrmText(CarsDetailLocationTextBox.Text);
-            var newTitle = NormalizeCrmText(CarsDetailTitleTextBox.Text);
-            var newKey = NormalizeCrmText(CarsDetailKeyTextBox.Text);
-            var newInspection = NormalizeCrmText(CarsDetailInspectionTextBox.Text);
-            var newReExport = NormalizeCrmText(CarsDetailReExportTextBox.Text);
+            var newTitle = CarFormFlag(selectedCar == null ? "" : selectedCar.Title, CarsDetailTitleCheckBox.Checked);
+            var newKey = CarFormFlag(selectedCar == null ? "" : selectedCar.Key, CarsDetailKeyCheckBox.Checked);
+            var newInspection = CarFormFlag(selectedCar == null ? "" : selectedCar.Inspection, CarsDetailInspectionCheckBox.Checked);
+            var newReExport = CarFormFlag(selectedCar == null ? "" : selectedCar.ReExport, CarsDetailReExportCheckBox.Checked);
             var newVolume = NormalizeCrmText(CarsDetailVolumeTextBox.Text);
             var newPower = NormalizeCrmText(CarsDetailPowerTextBox.Text);
             var newPortCost = NormalizeCrmText(CarsDetailPortCostTextBox.Text);
@@ -1286,7 +1333,7 @@ namespace GLC_EXPRESS
                 return;
             }
 
-            if (!TryValidateCarBusinessRules(data, selectedCar.Id, newVin))
+            if (!ValidateCarEditor() || !TryValidateCarBusinessRules(data, selectedCar.Id, newVin))
             {
                 CarsInputsNeedRefresh = false;
                 BindAll(data);
@@ -1297,15 +1344,15 @@ namespace GLC_EXPRESS
 
             AppendCarChangeHistory(selectedCar, "Рейс", selectedCar.TripNumber, newTripNumber, changedBy);
             AppendCarChangeHistory(selectedCar, "VIN", selectedCar.Vin, newVin, changedBy);
-            AppendCarChangeHistory(selectedCar, "Дилер", selectedCar.Dealer, newDealer, changedBy);
+            AppendCarChangeHistory(selectedCar, "Заказчик", selectedCar.ClientName, newDealer, changedBy);
             AppendCarChangeHistory(selectedCar, "Статус", selectedCar.Status, newStatus, changedBy);
 
             selectedCar.TripNumber = newTripNumber;
             selectedCar.Forwarder = newForwarder;
-            selectedCar.Dealer = newDealer;
+            selectedCar.ClientId = newClientId;
+            selectedCar.ClientName = newDealer;
             selectedCar.Status = newStatus;
             selectedCar.StartPrice = newStartPrice;
-            selectedCar.Invoice = newInvoice;
             selectedCar.Year = newYear;
             selectedCar.Brand = newBrand;
             selectedCar.Model = newModel;
@@ -1331,7 +1378,7 @@ namespace GLC_EXPRESS
             selectedCar.Address = newAddress;
             selectedCar.Comment = newComment;
 
-            CarDealerDirectoryService.EnsureRegistered(newDealer);
+            CarForwarderDirectoryService.EnsureRegistered(newForwarder);
 
             CrmRepository.Save(data);
             CarsInputsNeedRefresh = true;
@@ -1994,6 +2041,8 @@ namespace GLC_EXPRESS
                 SettingsHomeContactWhatsAppUrlTextBox.Text = settings.HomeContactWhatsAppUrl;
                 SettingsRequireUniqueTripNumbersCheckBox.Checked = settings.RequireUniqueTripNumbers;
                 SettingsValidatePrepaymentCheckBox.Checked = settings.ValidatePrepaymentAgainstFreight;
+                SettingsShowCalculatorInMenuCheckBox.Checked = settings.ShowCalculatorInMenu;
+                SettingsAllowPublicRegistrationCheckBox.Checked = settings.AllowPublicRegistration;
             }
 
             SetSelectedValue(SettingsHomeContentLanguageDropDownList, homeContentLanguage);
@@ -2100,6 +2149,7 @@ namespace GLC_EXPRESS
         {
             var data = CrmRepository.Load();
             var settings = CurrentCrmSettings;
+            BindCarEditorLists(data, null);
 
             BindClientsDropDownList(data.Clients, GetPostedListControlValue(TripsClientDropDownList));
             BindDriversDropDownList(data.Drivers, GetPostedListControlValue(TripsDriverDropDownList));
@@ -2194,6 +2244,7 @@ namespace GLC_EXPRESS
 
             var selectedCar = FindById(cars, SelectedCarId);
 
+            BindCarEditorLists(data, shouldRefreshCarInputs ? selectedCar : null);
             if (selectedCar == null)
             {
                 SelectedCarId = string.Empty;
@@ -2208,9 +2259,6 @@ namespace GLC_EXPRESS
             CarsRepeater.Visible = cars.Count > 0;
             CarsEmptyPanel.Visible = cars.Count == 0;
             CarsDetailPanel.Visible = selectedCar != null && string.Equals(ActiveTab, "cars", StringComparison.OrdinalIgnoreCase);
-
-            CarDealerDirectoryService.EnsureRegistered(cars.Select(item => item.Dealer));
-            CarsDealerSuggestionsLiteral.Text = BuildDatalistOptionsHtml(CarDealerDirectoryService.GetDealerNames().Concat(cars.Select(item => item.Dealer)));
 
             if (selectedCar == null)
             {
@@ -2425,30 +2473,30 @@ namespace GLC_EXPRESS
                 return;
             }
 
-            CarsDetailForwarderTextBox.Text = car.Forwarder;
-            CarsDetailDealerTextBox.Text = car.Dealer;
-            CarsDetailStatusTextBox.Text = car.Status;
-            CarsDetailStartPriceTextBox.Text = car.StartPrice;
-            CarsDetailInvoiceTextBox.Text = car.Invoice;
-            CarsDetailYearTextBox.Text = car.Year;
+            CarsDetailForwarderDropDownList.SelectedValue = car.Forwarder ?? "";
+            CarsNewForwarderTextBox.Text = "";
+            CarsDetailClientDropDownList.SelectedValue = car.ClientId ?? "";
+            CarsDetailStatusDropDownList.SelectedValue = car.Status;
+            CarsDetailStartPriceTextBox.Text = CarNumberText(car.StartPrice);
+            CarsDetailYearDropDownList.SelectedValue = car.Year;
             CarsDetailBrandTextBox.Text = car.Brand;
             CarsDetailModelTextBox.Text = car.Model;
             CarsDetailVinTextBox.Text = car.Vin;
             CarsDetailLocationTextBox.Text = car.Location;
-            CarsDetailTitleTextBox.Text = car.Title;
-            CarsDetailKeyTextBox.Text = car.Key;
-            CarsDetailInspectionTextBox.Text = car.Inspection;
-            CarsDetailReExportTextBox.Text = car.ReExport;
-            CarsDetailVolumeTextBox.Text = car.Volume;
-            CarsDetailPowerTextBox.Text = car.Power;
-            CarsDetailPortCostTextBox.Text = car.PortCost;
-            CarsDetailLoadingCostTextBox.Text = car.LoadingCost;
-            CarsDetailTowTruckCostTextBox.Text = car.TowTruckCost;
-            CarsDetailParkingCostTextBox.Text = car.ParkingCost;
-            CarsDetailInspectionCostTextBox.Text = car.InspectionCost;
-            CarsDetailReExportCostTextBox.Text = car.ReExportCost;
-            CarsDetailExpertiseCostTextBox.Text = car.ExpertiseCost;
-            CarsDetailDeliveryCostTextBox.Text = car.DeliveryCost;
+            CarsDetailTitleCheckBox.Checked = CarFormFlagChecked(car.Title);
+            CarsDetailKeyCheckBox.Checked = CarFormFlagChecked(car.Key);
+            CarsDetailInspectionCheckBox.Checked = CarFormFlagChecked(car.Inspection);
+            CarsDetailReExportCheckBox.Checked = CarFormFlagChecked(car.ReExport);
+            CarsDetailVolumeTextBox.Text = CarNumberText(car.Volume);
+            CarsDetailPowerTextBox.Text = CarNumberText(car.Power);
+            CarsDetailPortCostTextBox.Text = CarNumberText(car.PortCost);
+            CarsDetailLoadingCostTextBox.Text = CarNumberText(car.LoadingCost);
+            CarsDetailTowTruckCostTextBox.Text = CarNumberText(car.TowTruckCost);
+            CarsDetailParkingCostTextBox.Text = CarNumberText(car.ParkingCost);
+            CarsDetailInspectionCostTextBox.Text = CarNumberText(car.InspectionCost);
+            CarsDetailReExportCostTextBox.Text = CarNumberText(car.ReExportCost);
+            CarsDetailExpertiseCostTextBox.Text = CarNumberText(car.ExpertiseCost);
+            CarsDetailDeliveryCostTextBox.Text = CarNumberText(car.DeliveryCost);
             CarsDetailFirstNameTextBox.Text = car.FirstName;
             CarsDetailLastNameTextBox.Text = car.LastName;
             CarsDetailPassportTextBox.Text = car.Passport;
@@ -2458,20 +2506,19 @@ namespace GLC_EXPRESS
 
         private void ClearCarDetailInputs()
         {
-            CarsDetailForwarderTextBox.Text = string.Empty;
-            CarsDetailDealerTextBox.Text = string.Empty;
-            CarsDetailStatusTextBox.Text = string.Empty;
+            CarsDetailForwarderDropDownList.SelectedValue = string.Empty;
+            CarsDetailClientDropDownList.SelectedValue = string.Empty;
+            CarsDetailStatusDropDownList.SelectedValue = string.Empty;
             CarsDetailStartPriceTextBox.Text = string.Empty;
-            CarsDetailInvoiceTextBox.Text = string.Empty;
-            CarsDetailYearTextBox.Text = string.Empty;
+            CarsDetailYearDropDownList.SelectedValue = string.Empty;
             CarsDetailBrandTextBox.Text = string.Empty;
             CarsDetailModelTextBox.Text = string.Empty;
             CarsDetailVinTextBox.Text = string.Empty;
             CarsDetailLocationTextBox.Text = string.Empty;
-            CarsDetailTitleTextBox.Text = string.Empty;
-            CarsDetailKeyTextBox.Text = string.Empty;
-            CarsDetailInspectionTextBox.Text = string.Empty;
-            CarsDetailReExportTextBox.Text = string.Empty;
+            CarsDetailTitleCheckBox.Checked = false;
+            CarsDetailKeyCheckBox.Checked = false;
+            CarsDetailInspectionCheckBox.Checked = false;
+            CarsDetailReExportCheckBox.Checked = false;
             CarsDetailVolumeTextBox.Text = string.Empty;
             CarsDetailPowerTextBox.Text = string.Empty;
             CarsDetailPortCostTextBox.Text = string.Empty;
@@ -2854,7 +2901,7 @@ namespace GLC_EXPRESS
             existingTrip.DriverId = driver.Id;
             existingTrip.DriverName = driver.FullName;
             existingTrip.StartDate = startDate.ToString("yyyy-MM-dd");
-            existingTrip.EndDate = endDate.ToString("yyyy-MM-dd");
+            existingTrip.EndDate = endDate == DateTime.MinValue ? "" : endDate.ToString("yyyy-MM-dd");
             existingTrip.Freight = freight;
             existingTrip.Prepayment = prepayment;
 
@@ -3365,13 +3412,13 @@ namespace GLC_EXPRESS
             endDate = DateTime.MinValue;
 
             if (!DateTime.TryParse(startDateText, out startDate)
-                || !DateTime.TryParse(endDateText, out endDate))
+                || (!string.IsNullOrWhiteSpace(endDateText) && !DateTime.TryParse(endDateText, out endDate)))
             {
                 ShowMessage("Укажите корректные даты рейса.", "warning");
                 return false;
             }
 
-            if (endDate < startDate)
+            if (endDate != DateTime.MinValue && endDate < startDate)
             {
                 ShowMessage("Дата окончания не может быть раньше даты начала.", "warning");
                 return false;
@@ -3438,8 +3485,7 @@ namespace GLC_EXPRESS
         {
             var normalizedValue = (rawValue ?? string.Empty).Trim();
 
-            return decimal.TryParse(normalizedValue, NumberStyles.Number, CultureInfo.CurrentCulture, out value)
-                || decimal.TryParse(normalizedValue, NumberStyles.Number, CultureInfo.InvariantCulture, out value);
+            return decimal.TryParse(normalizedValue.Replace(',', '.'), NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out value) && value >= 0;
         }
 
         private static string GetValidatedFileExtension(string fileName, IEnumerable<string> allowedExtensions)
@@ -5284,13 +5330,14 @@ namespace GLC_EXPRESS
             var synchronizedStatus = NormalizeCrmText(inquiry.Status);
 
             hasChanged |= AssignStringIfDifferent(car.SourceInquiryId, inquiry.Id, value => car.SourceInquiryId = value);
+            if (isNew || string.IsNullOrWhiteSpace(car.ClientId))
+            {
             hasChanged |= AssignStringIfDifferent(car.ClientId, client == null ? string.Empty : client.Id, value => car.ClientId = value);
             hasChanged |= AssignStringIfDifferent(car.ClientName, client == null ? NormalizeCrmText(inquiry.Name) : client.Name, value => car.ClientName = value);
-            hasChanged |= AssignStringIfDifferent(car.Forwarder, NormalizeCrmText(inquiry.AssignedManager), value => car.Forwarder = value);
+            }
             AppendCarChangeHistory(car, "Дилер", car.Dealer, synchronizedDealer, "CRM sync");
             hasChanged |= AssignStringIfDifferent(car.Dealer, synchronizedDealer, value => car.Dealer = value);
             hasChanged |= AssignStringIfDifferent(car.Location, NormalizeCrmText(inquiry.Direction), value => car.Location = value);
-            hasChanged |= AssignStringIfDifferent(car.ReExport, NormalizeCrmText(inquiry.CargoType), value => car.ReExport = value);
             AppendCarChangeHistory(car, "Статус", car.Status, synchronizedStatus, "CRM sync");
             hasChanged |= AssignStringIfDifferent(car.Status, synchronizedStatus, value => car.Status = value);
             hasChanged |= AssignStringIfDifferent(car.Comment, NormalizeCrmText(inquiry.ClientComment), value => car.Comment = value);
@@ -5438,10 +5485,9 @@ namespace GLC_EXPRESS
             {
                 CreateCarDetail("Рейс", car.TripNumber),
                 CreateCarDetail("Форвардер", car.Forwarder),
-                CreateCarDetail("Дилер", car.Dealer),
+                CreateCarDetail("Заказчик", car.ClientName),
                 CreateCarDetail("Статус", car.Status),
-                CreateCarDetail("Стартовая цена", car.StartPrice),
-                CreateCarDetail("Инвойс", car.Invoice)
+                CreateCarDetail("Стартовая цена", car.StartPrice)
             });
             AppendCarDetailSection(builder, "Автомобиль", new[]
             {

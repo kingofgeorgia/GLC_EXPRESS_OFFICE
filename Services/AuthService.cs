@@ -14,6 +14,8 @@ namespace GLC_EXPRESS.Services
         private const string DefaultUsernameKey = "Auth.DefaultUsername";
         private const string DefaultPasswordHashKey = "Auth.DefaultPasswordHash";
         private const string DefaultRoles = "Admin";
+        public const string PublicClientRole = "Client";
+        private const int PublicPasswordIterations = 180000;
 
         public static bool ValidateCredentials(string username, string password)
         {
@@ -34,7 +36,7 @@ namespace GLC_EXPRESS.Services
             var passwordHash = ComputeSha256(password);
             user = FindActiveUser(normalizedUsername);
 
-            if (user != null && string.Equals(user.PasswordHash, passwordHash, StringComparison.OrdinalIgnoreCase))
+            if (user != null && VerifyPassword(user, password, passwordHash))
             {
                 return true;
             }
@@ -46,6 +48,96 @@ namespace GLC_EXPRESS.Services
             }
 
             return ValidateLegacyUser(normalizedUsername, passwordHash);
+        }
+
+        public static void RegisterPublicAccount(string fullName, string email, string phone, string password)
+        {
+            if (!CrmSettingsService.IsPublicRegistrationEnabled())
+            {
+                throw new InvalidOperationException("Публичная регистрация сейчас отключена.");
+            }
+
+            var normalizedName = (fullName ?? string.Empty).Trim();
+            var normalizedEmail = (email ?? string.Empty).Trim();
+            var normalizedPhone = (phone ?? string.Empty).Trim();
+            var emailKey = NormalizeLookupValue(normalizedEmail);
+
+            if (normalizedName.Length < 2 || normalizedName.Length > 120)
+            {
+                throw new ArgumentException("Укажите имя длиной от 2 до 120 символов.");
+            }
+
+            if (normalizedEmail.Length > 254 || !System.Text.RegularExpressions.Regex.IsMatch(
+                normalizedEmail,
+                @"^[^\s@]+@[^\s@]+\.[^\s@]+$",
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase))
+            {
+                throw new ArgumentException("Укажите корректный email.");
+            }
+
+            if (normalizedPhone.Length > 40)
+            {
+                throw new ArgumentException("Номер телефона не должен превышать 40 символов.");
+            }
+
+            if (string.IsNullOrEmpty(password) || password.Length < 10 || password.Length > 128)
+            {
+                throw new ArgumentException("Пароль должен содержать от 10 до 128 символов.");
+            }
+
+            var saltBytes = new byte[16];
+            using (var random = new RNGCryptoServiceProvider())
+            {
+                random.GetBytes(saltBytes);
+            }
+
+            var salt = Convert.ToBase64String(saltBytes);
+            var hash = DerivePasswordHash(password, saltBytes, PublicPasswordIterations);
+            var user = new AuthUserRecord
+            {
+                Username = normalizedEmail,
+                UsernameNormalized = emailKey,
+                FullName = normalizedName,
+                Email = normalizedEmail,
+                PasswordHash = hash,
+                PasswordSalt = salt,
+                PasswordIterations = PublicPasswordIterations,
+                Roles = new System.Collections.Generic.List<string> { PublicClientRole },
+                IsActive = true
+            };
+
+            using (var database = AppDatabase.Open())
+            {
+                var users = database.GetCollection<AuthUserRecord>("users");
+                var clients = database.GetCollection<ClientRecord>("clients");
+                if (users.FindOne(item => item.UsernameNormalized == emailKey) != null)
+                {
+                    throw new InvalidOperationException("Этот email уже зарегистрирован.");
+                }
+
+                database.BeginTrans();
+                try
+                {
+                    users.Insert(user);
+                    if (!clients.FindAll().Any(item => string.Equals(
+                        NormalizeLookupValue(item.Email), emailKey, StringComparison.OrdinalIgnoreCase)))
+                    {
+                        clients.Insert(new ClientRecord
+                        {
+                            Name = normalizedName,
+                            PhoneNumber = normalizedPhone,
+                            Email = normalizedEmail,
+                            Direction = "Регистрация на сайте"
+                        });
+                    }
+                    database.Commit();
+                }
+                catch
+                {
+                    database.Rollback();
+                    throw;
+                }
+            }
         }
 
         public static string[] GetRolesForUser(string username)
@@ -119,6 +211,55 @@ namespace GLC_EXPRESS.Services
 
                 return builder.ToString();
             }
+        }
+
+        private static bool VerifyPassword(AuthUserRecord user, string password, string legacyHash)
+        {
+            if (user == null || string.IsNullOrWhiteSpace(user.PasswordHash))
+            {
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(user.PasswordSalt))
+            {
+                return FixedTimeEquals(user.PasswordHash, legacyHash);
+            }
+
+            try
+            {
+                var salt = Convert.FromBase64String(user.PasswordSalt);
+                var iterations = user.PasswordIterations > 0 ? user.PasswordIterations : PublicPasswordIterations;
+                var candidate = DerivePasswordHash(password, salt, iterations);
+                return FixedTimeEquals(user.PasswordHash, candidate);
+            }
+            catch (FormatException)
+            {
+                return false;
+            }
+        }
+
+        private static string DerivePasswordHash(string password, byte[] salt, int iterations)
+        {
+            using (var derivation = new Rfc2898DeriveBytes(password, salt, iterations))
+            {
+                return Convert.ToBase64String(derivation.GetBytes(32));
+            }
+        }
+
+        private static bool FixedTimeEquals(string left, string right)
+        {
+            if (left == null || right == null || left.Length != right.Length)
+            {
+                return false;
+            }
+
+            var difference = 0;
+            for (var index = 0; index < left.Length; index++)
+            {
+                difference |= left[index] ^ right[index];
+            }
+
+            return difference == 0;
         }
 
         private static string[] GetConfiguredRoles(string username)

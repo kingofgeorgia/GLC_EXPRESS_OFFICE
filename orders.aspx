@@ -170,20 +170,19 @@
                                 <div class="form-group">
                                     <label for="<%= TripsEndDateTextBox.ClientID %>">Дата окончания</label>
                                     <asp:TextBox ID="TripsEndDateTextBox" runat="server" CssClass="form-control" TextMode="Date" />
-                                    <asp:RequiredFieldValidator ID="TripsEndDateRequiredValidator" runat="server" ControlToValidate="TripsEndDateTextBox" ValidationGroup="TripsGroup" CssClass="text-danger" Display="Dynamic" ErrorMessage="Укажите дату окончания." />
                                     <asp:CompareValidator ID="TripsDateRangeValidator" runat="server" ControlToValidate="TripsEndDateTextBox" ControlToCompare="TripsStartDateTextBox" Operator="GreaterThanEqual" Type="Date" ValidationGroup="TripsGroup" CssClass="text-danger" Display="Dynamic" ErrorMessage="Дата окончания не может быть раньше даты начала." />
                                 </div>
 
                                 <div class="form-group">
                                     <label for="<%= TripsFreightTextBox.ClientID %>">Фрахт</label>
-                                    <asp:TextBox ID="TripsFreightTextBox" runat="server" CssClass="form-control" />
+                                    <asp:TextBox ID="TripsFreightTextBox" runat="server" CssClass="form-control" TextMode="Number" min="0" step="0.01" />
                                     <asp:RequiredFieldValidator ID="TripsFreightRequiredValidator" runat="server" ControlToValidate="TripsFreightTextBox" ValidationGroup="TripsGroup" CssClass="text-danger" Display="Dynamic" ErrorMessage="Укажите фрахт." />
                                     <asp:RegularExpressionValidator ID="TripsFreightFormatValidator" runat="server" ControlToValidate="TripsFreightTextBox" ValidationGroup="TripsGroup" CssClass="text-danger" Display="Dynamic" ValidationExpression="^[0-9]+([\.,][0-9]{1,2})?$" ErrorMessage="Фрахт должен быть числом." />
                                 </div>
 
                                 <div class="form-group">
                                     <label for="<%= TripsPrepaymentTextBox.ClientID %>">Предоплата</label>
-                                    <asp:TextBox ID="TripsPrepaymentTextBox" runat="server" CssClass="form-control" />
+                                    <asp:TextBox ID="TripsPrepaymentTextBox" runat="server" CssClass="form-control" TextMode="Number" min="0" step="0.01" />
                                     <asp:RequiredFieldValidator ID="TripsPrepaymentRequiredValidator" runat="server" ControlToValidate="TripsPrepaymentTextBox" ValidationGroup="TripsGroup" CssClass="text-danger" Display="Dynamic" ErrorMessage="Укажите предоплату." />
                                     <asp:RegularExpressionValidator ID="TripsPrepaymentFormatValidator" runat="server" ControlToValidate="TripsPrepaymentTextBox" ValidationGroup="TripsGroup" CssClass="text-danger" Display="Dynamic" ValidationExpression="^[0-9]+([\.,][0-9]{1,2})?$" ErrorMessage="Предоплата должна быть числом." />
                                 </div>
@@ -293,13 +292,13 @@
                                                 <td>
                                                     <asp:PlaceHolder runat="server" Visible='<%# !IsTripsInlineEditRow(Eval("Id")) %>'><%#: Eval("Freight") %></asp:PlaceHolder>
                                                     <asp:PlaceHolder runat="server" Visible='<%# IsTripsInlineEditRow(Eval("Id")) %>'>
-                                                        <asp:TextBox ID="InlineTripFreightTextBox" runat="server" CssClass="form-control input-sm" Text='<%# Bind("Freight") %>' />
+                                                        <asp:TextBox ID="InlineTripFreightTextBox" runat="server" TextMode="Number" min="0" step="0.01" CssClass="form-control input-sm" Text='<%# Bind("Freight") %>' />
                                                     </asp:PlaceHolder>
                                                 </td>
                                                 <td>
                                                     <asp:PlaceHolder runat="server" Visible='<%# !IsTripsInlineEditRow(Eval("Id")) %>'><%#: Eval("Prepayment") %></asp:PlaceHolder>
                                                     <asp:PlaceHolder runat="server" Visible='<%# IsTripsInlineEditRow(Eval("Id")) %>'>
-                                                        <asp:TextBox ID="InlineTripPrepaymentTextBox" runat="server" CssClass="form-control input-sm" Text='<%# Bind("Prepayment") %>' />
+                                                        <asp:TextBox ID="InlineTripPrepaymentTextBox" runat="server" TextMode="Number" min="0" step="0.01" CssClass="form-control input-sm" Text='<%# Bind("Prepayment") %>' />
                                                     </asp:PlaceHolder>
                                                 </td>
                                                 <td class="crm-actions-cell">
@@ -892,16 +891,11 @@
                     <div class="col-md-6">
                         <div class="panel panel-default crm-form-panel">
                             <div class="panel-heading">
-                                <h2 class="panel-title">Настройки CRM</h2>
+                                <h2 class="panel-title">Доступ и правила CRM</h2>
                             </div>
                             <div class="panel-body">
-                                <p class="text-muted">Здесь можно менять бренд, доступ, справочники статусов и ограничения на загрузку файлов без правки кода.</p>
-
-                                <div class="form-group">
-                                    <label for="<%= SettingsCompanyNameTextBox.ClientID %>">Название компании</label>
-                                    <asp:TextBox ID="SettingsCompanyNameTextBox" runat="server" CssClass="form-control" />
-                                    <small class="text-muted crm-form-hint">Используется в шапке сайта, если логотип не загружен.</small>
-                                </div>
+                                <h3 class="crm-settings-section-title">Доступ и интерфейс CRM</h3>
+                                <p class="text-muted">Настройте, кто может работать в CRM и какая вкладка будет открываться первой.</p>
 
                                 <div class="form-group">
                                     <label for="<%= SettingsNewRoleTextBox.ClientID %>">Роли с доступом в CRM</label>
@@ -928,6 +922,21 @@
                                     </asp:Repeater>
                                 </div>
 
+                                <div class="form-group">
+                                    <label for="<%= SettingsDefaultTabDropDownList.ClientID %>">Вкладка CRM по умолчанию</label>
+                                    <asp:DropDownList ID="SettingsDefaultTabDropDownList" runat="server" CssClass="form-control">
+                                        <asp:ListItem Text="Дашборд" Value="dashboard" />
+                                        <asp:ListItem Text="Рейсы" Value="trips" />
+                                        <asp:ListItem Text="Водители" Value="drivers" />
+                                        <asp:ListItem Text="Автопарк" Value="fleet" />
+                                        <asp:ListItem Text="Автомобили" Value="cars" />
+                                        <asp:ListItem Text="Клиенты" Value="clients" />
+                                        <asp:ListItem Text="Заявки" Value="inquiries" />
+                                        <asp:ListItem Text="Настройки" Value="settings" />
+                                    </asp:DropDownList>
+                                </div>
+
+                                <h3 class="crm-settings-section-title">Рейсы</h3>
                                 <div class="form-group">
                                     <label for="<%= SettingsNewTripStatusTextBox.ClientID %>">Статусы рейсов</label>
                                     <div class="input-group crm-settings-editor-input">
@@ -958,20 +967,6 @@
                                     <asp:DropDownList ID="SettingsDefaultTripStatusDropDownList" runat="server" CssClass="form-control" />
                                 </div>
 
-                                <div class="form-group">
-                                    <label for="<%= SettingsDefaultTabDropDownList.ClientID %>">Вкладка CRM по умолчанию</label>
-                                    <asp:DropDownList ID="SettingsDefaultTabDropDownList" runat="server" CssClass="form-control">
-                                        <asp:ListItem Text="Дашборд" Value="dashboard" />
-                                        <asp:ListItem Text="Рейсы" Value="trips" />
-                                        <asp:ListItem Text="Водители" Value="drivers" />
-                                        <asp:ListItem Text="Автопарк" Value="fleet" />
-                                        <asp:ListItem Text="Автомобили" Value="cars" />
-                                        <asp:ListItem Text="Клиенты" Value="clients" />
-                                        <asp:ListItem Text="Заявки" Value="inquiries" />
-                                        <asp:ListItem Text="Настройки" Value="settings" />
-                                    </asp:DropDownList>
-                                </div>
-
                                 <div class="checkbox">
                                     <label>
                                         <asp:CheckBox ID="SettingsRequireUniqueTripNumbersCheckBox" runat="server" />
@@ -985,15 +980,41 @@
                                         Проверять, что предоплата не превышает фрахт
                                     </label>
                                 </div>
+
+                                <h3 class="crm-settings-section-title">Публичное меню</h3>
+                                <p class="text-muted">Управляет ссылкой MileON Auto на каталог автомобилей. Изменение применяется сразу.</p>
+                                <div class="checkbox">
+                                    <label>
+                                        <asp:CheckBox ID="SettingsShowCalculatorInMenuCheckBox" runat="server" AutoPostBack="true" OnCheckedChanged="SettingsShowCalculatorInMenuCheckBox_CheckedChanged" />
+                                        Показывать ссылку MileON Auto в публичном меню
+                                    </label>
+                                </div>
+
+                                <h3 class="crm-settings-section-title">Регистрация клиентов</h3>
+                                <p class="text-muted">Переключатель сразу включает или отключает форму регистрации. Зарегистрированные клиенты появятся в списке клиентов CRM, но эта учетная запись не предоставляет доступ к CRM.</p>
+                                <div class="checkbox">
+                                    <label>
+                                        <asp:CheckBox ID="SettingsAllowPublicRegistrationCheckBox" runat="server" AutoPostBack="true" OnCheckedChanged="SettingsAllowPublicRegistrationCheckBox_CheckedChanged" />
+                                        Разрешить публичную регистрацию клиентов на сайте
+                                    </label>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="panel panel-default crm-form-panel">
                             <div class="panel-heading">
-                                <h2 class="panel-title">Файлы и бренд</h2>
+                                <h2 class="panel-title">Бренд сайта и файлы</h2>
                             </div>
                             <div class="panel-body">
+                                <h3 class="crm-settings-section-title">Название компании</h3>
+                                <div class="form-group">
+                                    <label for="<%= SettingsCompanyNameTextBox.ClientID %>">Название компании</label>
+                                    <asp:TextBox ID="SettingsCompanyNameTextBox" runat="server" CssClass="form-control" />
+                                    <small class="text-muted crm-form-hint">Используется в шапке сайта, если логотип не загружен.</small>
+                                </div>
+
+                                <h3 class="crm-settings-section-title">Логотип и форматы файлов</h3>
                                 <div class="form-group">
                                     <label for="<%= SettingsLogoUpload.ClientID %>">Логотип</label>
                                     <asp:FileUpload ID="SettingsLogoUpload" runat="server" CssClass="form-control" />
@@ -1013,14 +1034,14 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <asp:Button ID="SaveSettingsButton" runat="server" CssClass="btn btn-primary btn-block" Text="Сохранить настройки" CausesValidation="false" OnClick="SaveSettingsButton_Click" />
+                                    <asp:Button ID="SaveSettingsButton" runat="server" CssClass="btn btn-primary btn-block" Text="Сохранить настройки CRM" CausesValidation="false" OnClick="SaveSettingsButton_Click" />
                                 </div>
                             </div>
                         </div>
 
                         <div class="panel panel-default crm-form-panel">
                             <div class="panel-heading">
-                                <h2 class="panel-title">Импорт и экспорт</h2>
+                                <h2 class="panel-title">Импорт и экспорт данных</h2>
                             </div>
                             <div class="panel-body">
                                 <div class="form-group">
@@ -1086,7 +1107,7 @@
                     <div class="col-md-12">
                         <div class="panel panel-default crm-form-panel">
                             <div class="panel-heading">
-                                <h2 class="panel-title">Контент главной страницы</h2>
+                                <h2 class="panel-title">Главная страница: контакты, партнёры и отзывы</h2>
                             </div>
                             <div class="panel-body">
                                 <p class="text-muted">Отзывы, партнёры и контакты на home-странице теперь читаются из этих настроек.</p>
@@ -1208,7 +1229,7 @@
                     <div class="col-md-12">
                         <div class="panel panel-default crm-list-panel">
                             <div class="panel-heading">
-                                <h2 class="panel-title">Заявки с главной</h2>
+                                    <h2 class="panel-title">Заявки с главной страницы</h2>
                             </div>
                             <div class="panel-body">
                                 <p class="text-muted">Новые публичные заявки с home-страницы сохраняются в CRM и выделяют вкладку, пока у них остается статус &laquo;Новая&raquo;.</p>
@@ -1362,15 +1383,14 @@
                                 </div>
                                 <div class="col-sm-4">
                                     <div class="form-group">
-                                        <label for="<%= CarsDetailForwarderTextBox.ClientID %>">Форвардер</label>
-                                        <asp:TextBox ID="CarsDetailForwarderTextBox" runat="server" CssClass="form-control input-sm" />
+                                        <label for="<%= CarsDetailForwarderDropDownList.ClientID %>">Форвардер</label>
+                                        <asp:DropDownList ID="CarsDetailForwarderDropDownList" runat="server" CssClass="form-control input-sm" data-car-forwarder="true" /><asp:TextBox ID="CarsNewForwarderTextBox" runat="server" CssClass="form-control input-sm" placeholder="Название нового форвардера" data-new-forwarder="true" style="margin-top:8px" />
                                     </div>
                                 </div>
                                 <div class="col-sm-4">
                                     <div class="form-group">
-                                        <label for="<%= CarsDetailDealerTextBox.ClientID %>">Дилер</label>
-                                        <asp:TextBox ID="CarsDetailDealerTextBox" runat="server" CssClass="form-control input-sm" list="CarsDealerSuggestionsList" />
-                                        <datalist id="CarsDealerSuggestionsList"><asp:Literal ID="CarsDealerSuggestionsLiteral" runat="server" /></datalist>
+                                        <label for="<%= CarsDetailClientDropDownList.ClientID %>">Заказчик</label>
+                                        <asp:DropDownList ID="CarsDetailClientDropDownList" runat="server" CssClass="form-control input-sm" />
                                     </div>
                                 </div>
                             </div>
@@ -1378,41 +1398,36 @@
                             <div class="row">
                                 <div class="col-sm-4">
                                     <div class="form-group">
-                                        <label for="<%= CarsDetailStatusTextBox.ClientID %>">Статус</label>
-                                        <asp:TextBox ID="CarsDetailStatusTextBox" runat="server" CssClass="form-control input-sm" />
+                                        <label for="<%= CarsDetailStatusDropDownList.ClientID %>">Статус</label>
+                                        <asp:DropDownList ID="CarsDetailStatusDropDownList" runat="server" CssClass="form-control input-sm" />
                                     </div>
                                 </div>
                                 <div class="col-sm-4">
                                     <div class="form-group">
                                         <label for="<%= CarsDetailStartPriceTextBox.ClientID %>">Стартовая цена</label>
-                                        <asp:TextBox ID="CarsDetailStartPriceTextBox" runat="server" CssClass="form-control input-sm" />
+                                        <asp:TextBox ID="CarsDetailStartPriceTextBox" runat="server" CssClass="form-control input-sm" TextMode="Number" min="0" step="0.01" />
                                     </div>
                                 </div>
-                                <div class="col-sm-4">
-                                    <div class="form-group">
-                                        <label for="<%= CarsDetailInvoiceTextBox.ClientID %>">Инвойс</label>
-                                        <asp:TextBox ID="CarsDetailInvoiceTextBox" runat="server" CssClass="form-control input-sm" />
-                                    </div>
-                                </div>
+
                             </div>
 
                             <div class="row">
                                 <div class="col-sm-4">
                                     <div class="form-group">
-                                        <label for="<%= CarsDetailYearTextBox.ClientID %>">Год</label>
-                                        <asp:TextBox ID="CarsDetailYearTextBox" runat="server" CssClass="form-control input-sm" />
+                                        <label for="<%= CarsDetailYearDropDownList.ClientID %>">Год</label>
+                                        <asp:DropDownList ID="CarsDetailYearDropDownList" runat="server" CssClass="form-control input-sm" />
                                     </div>
                                 </div>
                                 <div class="col-sm-4">
                                     <div class="form-group">
                                         <label for="<%= CarsDetailBrandTextBox.ClientID %>">Марка</label>
-                                        <asp:TextBox ID="CarsDetailBrandTextBox" runat="server" CssClass="form-control input-sm" />
+                                        <datalist id="CarBrands"><asp:Literal ID="CarBrandsLiteral" runat="server" /></datalist><datalist id="CarModels"></datalist><script type="application/json" id="CarModelsData"><asp:Literal ID="CarModelsLiteral" runat="server" /></script><asp:TextBox list="CarBrands" ID="CarsDetailBrandTextBox" runat="server" CssClass="form-control input-sm" />
                                     </div>
                                 </div>
                                 <div class="col-sm-4">
                                     <div class="form-group">
                                         <label for="<%= CarsDetailModelTextBox.ClientID %>">Модель</label>
-                                        <asp:TextBox ID="CarsDetailModelTextBox" runat="server" CssClass="form-control input-sm" />
+                                        <asp:TextBox list="CarModels" ID="CarsDetailModelTextBox" runat="server" CssClass="form-control input-sm" />
                                     </div>
                                 </div>
                             </div>
@@ -1420,20 +1435,20 @@
                             <div class="row">
                                 <div class="col-sm-4">
                                     <div class="form-group">
-                                        <label for="<%= CarsDetailVinTextBox.ClientID %>">VIN</label>
-                                        <asp:TextBox ID="CarsDetailVinTextBox" runat="server" CssClass="form-control input-sm" />
+                                        <label for="<%= CarsDetailVinTextBox.ClientID %>">VIN <span class="text-danger">*</span></label>
+                                        <asp:TextBox ID="CarsDetailVinTextBox" runat="server" CssClass="form-control input-sm" /><asp:RequiredFieldValidator runat="server" ControlToValidate="CarsDetailVinTextBox" ValidationGroup="CarDetail" CssClass="text-danger" Display="Dynamic" ErrorMessage="VIN — обязательное поле." />
                                     </div>
                                 </div>
                                 <div class="col-sm-4">
                                     <div class="form-group">
-                                        <label for="<%= CarsDetailLocationTextBox.ClientID %>">Локация</label>
-                                        <asp:TextBox ID="CarsDetailLocationTextBox" runat="server" CssClass="form-control input-sm" />
+                                        <label for="<%= CarsDetailLocationTextBox.ClientID %>">Локация <span class="text-danger">*</span></label>
+                                        <asp:TextBox ID="CarsDetailLocationTextBox" runat="server" CssClass="form-control input-sm" /><asp:RequiredFieldValidator runat="server" ControlToValidate="CarsDetailLocationTextBox" ValidationGroup="CarDetail" CssClass="text-danger" Display="Dynamic" ErrorMessage="Локация — обязательное поле." />
                                     </div>
                                 </div>
                                 <div class="col-sm-4">
                                     <div class="form-group">
-                                        <label for="<%= CarsDetailTitleTextBox.ClientID %>">Тайтл</label>
-                                        <asp:TextBox ID="CarsDetailTitleTextBox" runat="server" CssClass="form-control input-sm" />
+                                        <label for="<%= CarsDetailTitleCheckBox.ClientID %>">Тайтл</label>
+                                        <asp:CheckBox ID="CarsDetailTitleCheckBox" runat="server" />
                                     </div>
                                 </div>
                             </div>
@@ -1441,20 +1456,20 @@
                             <div class="row">
                                 <div class="col-sm-4">
                                     <div class="form-group">
-                                        <label for="<%= CarsDetailKeyTextBox.ClientID %>">Ключ</label>
-                                        <asp:TextBox ID="CarsDetailKeyTextBox" runat="server" CssClass="form-control input-sm" />
+                                        <label for="<%= CarsDetailKeyCheckBox.ClientID %>">Ключ</label>
+                                        <asp:CheckBox ID="CarsDetailKeyCheckBox" runat="server" />
                                     </div>
                                 </div>
                                 <div class="col-sm-4">
                                     <div class="form-group">
-                                        <label for="<%= CarsDetailInspectionTextBox.ClientID %>">Инспекция</label>
-                                        <asp:TextBox ID="CarsDetailInspectionTextBox" runat="server" CssClass="form-control input-sm" />
+                                        <label for="<%= CarsDetailInspectionCheckBox.ClientID %>">Инспекция</label>
+                                        <asp:CheckBox ID="CarsDetailInspectionCheckBox" runat="server" />
                                     </div>
                                 </div>
                                 <div class="col-sm-4">
                                     <div class="form-group">
-                                        <label for="<%= CarsDetailReExportTextBox.ClientID %>">Ре-экспорт</label>
-                                        <asp:TextBox ID="CarsDetailReExportTextBox" runat="server" CssClass="form-control input-sm" />
+                                        <label for="<%= CarsDetailReExportCheckBox.ClientID %>">Ре-экспорт</label>
+                                        <asp:CheckBox ID="CarsDetailReExportCheckBox" runat="server" />
                                     </div>
                                 </div>
                             </div>
@@ -1463,13 +1478,13 @@
                                 <div class="col-sm-6">
                                     <div class="form-group">
                                         <label for="<%= CarsDetailVolumeTextBox.ClientID %>">Объем</label>
-                                        <asp:TextBox ID="CarsDetailVolumeTextBox" runat="server" CssClass="form-control input-sm" />
+                                        <asp:TextBox ID="CarsDetailVolumeTextBox" runat="server" CssClass="form-control input-sm" TextMode="Number" min="0" step="0.01" />
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
                                     <div class="form-group">
                                         <label for="<%= CarsDetailPowerTextBox.ClientID %>">Мощность</label>
-                                        <asp:TextBox ID="CarsDetailPowerTextBox" runat="server" CssClass="form-control input-sm" />
+                                        <asp:TextBox ID="CarsDetailPowerTextBox" runat="server" CssClass="form-control input-sm" TextMode="Number" min="0" step="1" />
                                     </div>
                                 </div>
                             </div>
@@ -1481,25 +1496,25 @@
                                 <div class="col-sm-3">
                                     <div class="form-group">
                                         <label for="<%= CarsDetailPortCostTextBox.ClientID %>">Портовые</label>
-                                        <asp:TextBox ID="CarsDetailPortCostTextBox" runat="server" CssClass="form-control input-sm" />
+                                        <asp:TextBox ID="CarsDetailPortCostTextBox" runat="server" CssClass="form-control input-sm" TextMode="Number" min="0" step="0.01" />
                                     </div>
                                 </div>
                                 <div class="col-sm-3">
                                     <div class="form-group">
                                         <label for="<%= CarsDetailLoadingCostTextBox.ClientID %>">Погрузка</label>
-                                        <asp:TextBox ID="CarsDetailLoadingCostTextBox" runat="server" CssClass="form-control input-sm" />
+                                        <asp:TextBox ID="CarsDetailLoadingCostTextBox" runat="server" CssClass="form-control input-sm" TextMode="Number" min="0" step="0.01" />
                                     </div>
                                 </div>
                                 <div class="col-sm-3">
                                     <div class="form-group">
                                         <label for="<%= CarsDetailTowTruckCostTextBox.ClientID %>">Эвакуатор</label>
-                                        <asp:TextBox ID="CarsDetailTowTruckCostTextBox" runat="server" CssClass="form-control input-sm" />
+                                        <asp:TextBox ID="CarsDetailTowTruckCostTextBox" runat="server" CssClass="form-control input-sm" TextMode="Number" min="0" step="0.01" />
                                     </div>
                                 </div>
                                 <div class="col-sm-3">
                                     <div class="form-group">
                                         <label for="<%= CarsDetailParkingCostTextBox.ClientID %>">Паркинг</label>
-                                        <asp:TextBox ID="CarsDetailParkingCostTextBox" runat="server" CssClass="form-control input-sm" />
+                                        <asp:TextBox ID="CarsDetailParkingCostTextBox" runat="server" CssClass="form-control input-sm" TextMode="Number" min="0" step="0.01" />
                                     </div>
                                 </div>
                             </div>
@@ -1508,25 +1523,25 @@
                                 <div class="col-sm-3">
                                     <div class="form-group">
                                         <label for="<%= CarsDetailInspectionCostTextBox.ClientID %>">Досмотр</label>
-                                        <asp:TextBox ID="CarsDetailInspectionCostTextBox" runat="server" CssClass="form-control input-sm" />
+                                        <asp:TextBox ID="CarsDetailInspectionCostTextBox" runat="server" CssClass="form-control input-sm" TextMode="Number" min="0" step="0.01" />
                                     </div>
                                 </div>
                                 <div class="col-sm-3">
                                     <div class="form-group">
                                         <label for="<%= CarsDetailReExportCostTextBox.ClientID %>">Реэкспорт</label>
-                                        <asp:TextBox ID="CarsDetailReExportCostTextBox" runat="server" CssClass="form-control input-sm" />
+                                        <asp:TextBox ID="CarsDetailReExportCostTextBox" runat="server" CssClass="form-control input-sm" TextMode="Number" min="0" step="0.01" />
                                     </div>
                                 </div>
                                 <div class="col-sm-3">
                                     <div class="form-group">
                                         <label for="<%= CarsDetailExpertiseCostTextBox.ClientID %>">Экспертиза</label>
-                                        <asp:TextBox ID="CarsDetailExpertiseCostTextBox" runat="server" CssClass="form-control input-sm" />
+                                        <asp:TextBox ID="CarsDetailExpertiseCostTextBox" runat="server" CssClass="form-control input-sm" TextMode="Number" min="0" step="0.01" />
                                     </div>
                                 </div>
                                 <div class="col-sm-3">
                                     <div class="form-group">
                                         <label for="<%= CarsDetailDeliveryCostTextBox.ClientID %>">Стоимость доставки</label>
-                                        <asp:TextBox ID="CarsDetailDeliveryCostTextBox" runat="server" CssClass="form-control input-sm" />
+                                        <asp:TextBox ID="CarsDetailDeliveryCostTextBox" runat="server" CssClass="form-control input-sm" TextMode="Number" min="0" step="0.01" />
                                     </div>
                                 </div>
                             </div>
@@ -1567,7 +1582,7 @@
                             </div>
 
                             <div class="crm-bulk-toolbar-actions">
-                                <asp:Button ID="SaveCarsDetailButton" runat="server" CssClass="btn btn-primary btn-sm" Text="Сохранить карточку" CausesValidation="false" OnClick="SaveCarsDetailButton_Click" />
+                                <asp:Button ID="SaveCarsDetailButton" runat="server" ValidationGroup="CarDetail" CssClass="btn btn-primary btn-sm" Text="Сохранить карточку" CausesValidation="true" OnClick="SaveCarsDetailButton_Click" />
                             </div>
 
                             <div class="panel panel-default crm-car-history-panel">
@@ -1932,4 +1947,5 @@
             });
         })();
     </script>
+<script src="Scripts/car-editor.js"></script>
 </asp:Content>

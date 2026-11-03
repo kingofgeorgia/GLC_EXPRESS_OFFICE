@@ -1,145 +1,29 @@
 ﻿<%@ Page Title="GLC Express | Аукционы и доставка авто из США" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="GLC_EXPRESS._Default" %>
 
+<%@ Register Src="~/Controls/Home/Hero.ascx" TagPrefix="glc" TagName="Hero" %>
+<%@ Register Src="~/Controls/Home/KpiStats.ascx" TagPrefix="glc" TagName="KpiStats" %>
+<%@ Register Src="~/Controls/Home/ProcessTimeline.ascx" TagPrefix="glc" TagName="ProcessTimeline" %>
+<%@ Register Src="~/Controls/Home/VehicleCategories.ascx" TagPrefix="glc" TagName="VehicleCategories" %>
+<%@ Register Src="~/Controls/Home/ShippingOrigins.ascx" TagPrefix="glc" TagName="ShippingOrigins" %>
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
     <asp:Panel ID="HomeLeadAlertPanel" runat="server" Visible="false" CssClass="alert landing-alert">
         <asp:Literal ID="HomeLeadAlertLiteral" runat="server" />
     </asp:Panel>
 
     <div class="landing-page">
-        <section class="landing-hero" id="home">
-            <div class="landing-shell landing-hero-grid">
-                <div class="landing-hero-copy">
-                    <span class="landing-eyebrow"><%: T("HomeHeroEyebrow") %></span>
-                    <h1><%: T("HomeHeroTitle") %></h1>
-                    <p class="landing-lead"><%: T("HomeHeroLead") %></p>
-                    <div class="landing-hero-actions">
-                        <a class="btn btn-primary btn-lg" href="#turnkey-order"><%: T("HomeHeroPrimaryCta") %></a>
-                        <a class="btn btn-default btn-lg" href="#contacts"><%: T("HomeHeroSecondaryCta") %></a>
-                    </div>
-                    <div class="landing-stat-grid">
-                        <div class="landing-stat-card">
-                            <strong><%: T("HomeHeroStatYearsValue") %></strong>
-                            <span><%: T("HomeHeroStatYearsLabel") %></span>
-                        </div>
-                        <div class="landing-stat-card">
-                            <strong><%: T("HomeHeroStatDeliveryValue") %></strong>
-                            <span><%: T("HomeHeroStatDeliveryLabel") %></span>
-                        </div>
-                        <div class="landing-stat-card">
-                            <strong><%: T("HomeHeroStatContainerValue") %></strong>
-                            <span><%: T("HomeHeroStatContainerLabel") %></span>
-                        </div>
-                        <div class="landing-stat-card">
-                            <strong><%: T("HomeHeroStatSupportValue") %></strong>
-                            <span><%: T("HomeHeroStatSupportLabel") %></span>
-                        </div>
-                    </div>
-                </div>
-                <div class="landing-hero-panel">
-                    <div class="landing-hero-panel-inner">
-                        <h2><%: T("HomeHeroPanelTitle") %></h2>
-                        <ul class="landing-check-list">
-                            <li><%: T("HomeHeroCheckBudget") %></li>
-                            <li><%: T("HomeHeroCheckHistory") %></li>
-                            <li><%: T("HomeHeroCheckBidding") %></li>
-                            <li><%: T("HomeHeroCheckShipping") %></li>
-                            <li><%: T("HomeHeroCheckRepair") %></li>
-                        </ul>
-                        <div class="landing-route-card">
-                            <span class="landing-route-label"><%: T("HomeHeroRouteLabel") %></span>
-                            <strong><%: T("HomeHeroRouteTitle") %></strong>
-                            <p><%: T("HomeHeroRouteDescription") %></p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="landing-section" id="about">
-            <div class="landing-shell">
-                <div class="landing-section-heading">
-                    <span class="landing-section-kicker"><%: T("AboutKicker") %></span>
-                    <h2><%: T("AboutTitle") %></h2>
-                    <p><%: T("AboutLead") %></p>
-                </div>
-                <div class="landing-feature-grid landing-feature-grid-wide">
-                    <article class="landing-feature-card">
-                        <h3><%: T("AboutFeatureAnalyticsTitle") %></h3>
-                        <p><%: T("AboutFeatureAnalyticsBody") %></p>
-                    </article>
-                    <article class="landing-feature-card">
-                        <h3><%: T("AboutFeatureDocumentsTitle") %></h3>
-                        <p><%: T("AboutFeatureDocumentsBody") %></p>
-                    </article>
-                    <article class="landing-feature-card">
-                        <h3><%: T("AboutFeatureInvestmentTitle") %></h3>
-                        <p><%: T("AboutFeatureInvestmentBody") %></p>
-                    </article>
-                </div>
-            </div>
-        </section>
-
+        <glc:Hero runat="server" />
+        <glc:KpiStats runat="server" />
+        <glc:ShippingOrigins runat="server" />
         <section class="landing-section landing-section-alt" id="cargo-types">
             <div class="landing-shell">
                 <div class="landing-section-heading compact">
                     <span class="landing-section-kicker"><%: T("CargoKicker") %></span>
                     <h2><%: T("CargoTitle") %></h2>
                 </div>
-                <div class="landing-transport-grid">
-                    <div class="landing-transport-card"><strong><%: T("CargoSedanTitle") %></strong><span><%: T("CargoSedanBody") %></span></div>
-                    <div class="landing-transport-card"><strong><%: T("CargoSuvTitle") %></strong><span><%: T("CargoSuvBody") %></span></div>
-                    <div class="landing-transport-card"><strong><%: T("CargoPickupTitle") %></strong><span><%: T("CargoPickupBody") %></span></div>
-                    <div class="landing-transport-card"><strong><%: T("CargoVanTitle") %></strong><span><%: T("CargoVanBody") %></span></div>
-                    <div class="landing-transport-card"><strong><%: T("CargoMotorcycleTitle") %></strong><span><%: T("CargoMotorcycleBody") %></span></div>
-                    <div class="landing-transport-card"><strong><%: T("CargoExclusiveTitle") %></strong><span><%: T("CargoExclusiveBody") %></span></div>
-                    <div class="landing-transport-card"><strong><%: T("CargoBoatsTitle") %></strong><span><%: T("CargoBoatsBody") %></span></div>
-                    <div class="landing-transport-card"><strong><%: T("CargoBuggyTitle") %></strong><span><%: T("CargoBuggyBody") %></span></div>
-                </div>
+                <glc:VehicleCategories runat="server" />
             </div>
         </section>
-
-        <section class="landing-section" id="advantages">
-            <div class="landing-shell">
-                <div class="landing-section-heading compact">
-                    <span class="landing-section-kicker"><%: T("AdvantagesKicker") %></span>
-                    <h2><%: T("AdvantagesTitle") %></h2>
-                </div>
-                <div class="landing-advantage-grid">
-                    <div class="landing-advantage-card"><strong><%: T("AdvantageYearsTitle") %></strong><span><%: T("AdvantageYearsBody") %></span></div>
-                    <div class="landing-advantage-card"><strong><%: T("AdvantageTransparentTitle") %></strong><span><%: T("AdvantageTransparentBody") %></span></div>
-                    <div class="landing-advantage-card"><strong><%: T("AdvantageBiddingTitle") %></strong><span><%: T("AdvantageBiddingBody") %></span></div>
-                    <div class="landing-advantage-card"><strong><%: T("AdvantageInspectionTitle") %></strong><span><%: T("AdvantageInspectionBody") %></span></div>
-                    <div class="landing-advantage-card"><strong><%: T("AdvantageLogisticsTitle") %></strong><span><%: T("AdvantageLogisticsBody") %></span></div>
-                    <div class="landing-advantage-card"><strong><%: T("AdvantageTrackingTitle") %></strong><span><%: T("AdvantageTrackingBody") %></span></div>
-                    <div class="landing-advantage-card"><strong><%: T("AdvantageInsuranceTitle") %></strong><span><%: T("AdvantageInsuranceBody") %></span></div>
-                    <div class="landing-advantage-card"><strong><%: T("AdvantageManagerTitle") %></strong><span><%: T("AdvantageManagerBody") %></span></div>
-                    <div class="landing-advantage-card"><strong><%: T("AdvantageSupportTitle") %></strong><span><%: T("AdvantageSupportBody") %></span></div>
-                </div>
-            </div>
-        </section>
-
-        <section class="landing-section landing-section-dark" id="turnkey-order">
-            <div class="landing-shell">
-                <div class="landing-section-heading light">
-                    <span class="landing-section-kicker"><%: T("TurnkeyKicker") %></span>
-                    <h2><%: T("TurnkeyTitle") %></h2>
-                    <p><%: T("TurnkeyLead") %></p>
-                </div>
-                <div class="landing-process-grid">
-                    <div class="landing-process-step"><span>1</span><strong><%: T("TurnkeyStep1Title") %></strong><p><%: T("TurnkeyStep1Body") %></p></div>
-                    <div class="landing-process-step"><span>2</span><strong><%: T("TurnkeyStep2Title") %></strong><p><%: T("TurnkeyStep2Body") %></p></div>
-                    <div class="landing-process-step"><span>3</span><strong><%: T("TurnkeyStep3Title") %></strong><p><%: T("TurnkeyStep3Body") %></p></div>
-                    <div class="landing-process-step"><span>4</span><strong><%: T("TurnkeyStep4Title") %></strong><p><%: T("TurnkeyStep4Body") %></p></div>
-                    <div class="landing-process-step"><span>5</span><strong><%: T("TurnkeyStep5Title") %></strong><p><%: T("TurnkeyStep5Body") %></p></div>
-                    <div class="landing-process-step"><span>6</span><strong><%: T("TurnkeyStep6Title") %></strong><p><%: T("TurnkeyStep6Body") %></p></div>
-                    <div class="landing-process-step"><span>7</span><strong><%: T("TurnkeyStep7Title") %></strong><p><%: T("TurnkeyStep7Body") %></p></div>
-                    <div class="landing-process-step"><span>8</span><strong><%: T("TurnkeyStep8Title") %></strong><p><%: T("TurnkeyStep8Body") %></p></div>
-                    <div class="landing-process-step"><span>9</span><strong><%: T("TurnkeyStep9Title") %></strong><p><%: T("TurnkeyStep9Body") %></p></div>
-                    <div class="landing-process-step"><span>10</span><strong><%: T("TurnkeyStep10Title") %></strong><p><%: T("TurnkeyStep10Body") %></p></div>
-                </div>
-            </div>
-        </section>
-
+        <glc:ProcessTimeline runat="server" />
         <section class="landing-section" id="auction-center">
             <div class="landing-shell landing-split-grid">
                 <div>
@@ -172,7 +56,6 @@
                 </div>
             </div>
         </section>
-
         <section class="landing-section landing-section-alt" id="delivery">
             <div class="landing-shell">
                 <div class="landing-section-heading compact">
@@ -200,7 +83,6 @@
                 </div>
             </div>
         </section>
-
         <section class="landing-section" id="repair">
             <div class="landing-shell landing-split-grid">
                 <div>
@@ -224,34 +106,48 @@
                 </div>
             </div>
         </section>
-
-        <section class="landing-partner-banner">
-            <div class="landing-shell landing-partner-banner-inner">
-                <div>
-                    <span class="landing-section-kicker"><%: T("PartnerKicker") %></span>
-                    <h2><%: T("PartnerTitle") %></h2>
-                    <p><%: T("PartnerLead") %></p>
-                </div>
-                <a class="btn btn-primary btn-lg" href="#contacts"><%: T("PartnerCta") %></a>
-            </div>
-        </section>
-
-        <section class="landing-section landing-section-alt" id="partners">
+        <section class="landing-section" id="advantages">
             <div class="landing-shell">
                 <div class="landing-section-heading compact">
-                    <span class="landing-section-kicker"><%: T("PartnersKicker") %></span>
-                    <h2><%: T("PartnersTitle") %></h2>
+                    <span class="landing-section-kicker"><%: T("AdvantagesKicker") %></span>
+                    <h2><%: T("AdvantagesTitle") %></h2>
                 </div>
-                <div class="landing-logo-grid">
-                    <asp:Repeater ID="HomePartnersRepeater" runat="server">
-                        <ItemTemplate>
-                            <div class="landing-logo-card"><%#: Container.DataItem %></div>
-                        </ItemTemplate>
-                    </asp:Repeater>
+                <div class="landing-advantage-grid">
+                    <div class="landing-advantage-card"><strong><%: T("AdvantageYearsTitle") %></strong><span><%: T("AdvantageYearsBody") %></span></div>
+                    <div class="landing-advantage-card"><strong><%: T("AdvantageTransparentTitle") %></strong><span><%: T("AdvantageTransparentBody") %></span></div>
+                    <div class="landing-advantage-card"><strong><%: T("AdvantageBiddingTitle") %></strong><span><%: T("AdvantageBiddingBody") %></span></div>
+                    <div class="landing-advantage-card"><strong><%: T("AdvantageInspectionTitle") %></strong><span><%: T("AdvantageInspectionBody") %></span></div>
+                    <div class="landing-advantage-card"><strong><%: T("AdvantageLogisticsTitle") %></strong><span><%: T("AdvantageLogisticsBody") %></span></div>
+                    <div class="landing-advantage-card"><strong><%: T("AdvantageTrackingTitle") %></strong><span><%: T("AdvantageTrackingBody") %></span></div>
+                    <div class="landing-advantage-card"><strong><%: T("AdvantageInsuranceTitle") %></strong><span><%: T("AdvantageInsuranceBody") %></span></div>
+                    <div class="landing-advantage-card"><strong><%: T("AdvantageManagerTitle") %></strong><span><%: T("AdvantageManagerBody") %></span></div>
+                    <div class="landing-advantage-card"><strong><%: T("AdvantageSupportTitle") %></strong><span><%: T("AdvantageSupportBody") %></span></div>
                 </div>
             </div>
         </section>
-
+        <section class="landing-section" id="about">
+            <div class="landing-shell">
+                <div class="landing-section-heading">
+                    <span class="landing-section-kicker"><%: T("AboutKicker") %></span>
+                    <h2><%: T("AboutTitle") %></h2>
+                    <p><%: T("AboutLead") %></p>
+                </div>
+                <div class="landing-feature-grid landing-feature-grid-wide">
+                    <article class="landing-feature-card">
+                        <h3><%: T("AboutFeatureAnalyticsTitle") %></h3>
+                        <p><%: T("AboutFeatureAnalyticsBody") %></p>
+                    </article>
+                    <article class="landing-feature-card">
+                        <h3><%: T("AboutFeatureDocumentsTitle") %></h3>
+                        <p><%: T("AboutFeatureDocumentsBody") %></p>
+                    </article>
+                    <article class="landing-feature-card">
+                        <h3><%: T("AboutFeatureInvestmentTitle") %></h3>
+                        <p><%: T("AboutFeatureInvestmentBody") %></p>
+                    </article>
+                </div>
+            </div>
+        </section>
         <section class="landing-section" id="reviews">
             <div class="landing-shell">
                 <div class="landing-section-heading compact">
@@ -270,7 +166,39 @@
                 </div>
             </div>
         </section>
-
+        <section class="landing-section landing-section-alt" id="partners">
+            <div class="landing-shell">
+                <div class="landing-section-heading compact">
+                    <span class="landing-section-kicker"><%: T("PartnersKicker") %></span>
+                    <h2><%: T("PartnersTitle") %></h2>
+                </div>
+                <div class="glc-partners-carousel" role="region" aria-label="<%: T("PartnersKicker") %>">
+                    <div class="glc-partners-track" id="glc-partners-track" role="list" tabindex="0">
+                    <asp:Repeater ID="HomePartnersRepeater" runat="server">
+                        <ItemTemplate>
+                            <article class="glc-partner-card" role="listitem">
+                                <div class="glc-partner-logo">
+                                    <asp:Image runat="server" ImageUrl='<%# Eval("LogoUrl") %>' AlternateText='<%# Eval("Name") %>' Visible='<%# Eval("HasLogo") %>' />
+                                    <asp:Panel runat="server" Visible='<%# !(bool)Eval("HasLogo") %>' CssClass="glc-partner-monogram"><%#: Eval("Monogram") %></asp:Panel>
+                                </div>
+                                <strong><%#: Eval("Name") %></strong>
+                            </article>
+                        </ItemTemplate>
+                    </asp:Repeater>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="landing-partner-banner" id="partnership">
+            <div class="landing-shell landing-partner-banner-inner">
+                <div>
+                    <span class="landing-section-kicker"><%: T("PartnerKicker") %></span>
+                    <h2><%: T("PartnerTitle") %></h2>
+                    <p><%: T("PartnerLead") %></p>
+                </div>
+                <a class="btn btn-primary btn-lg" href="#contacts"><%: T("PartnerCta") %></a>
+            </div>
+        </section>
         <section class="landing-section landing-section-dark" id="contacts">
             <div class="landing-shell landing-contact-grid">
                 <div class="landing-contact-copy">
@@ -361,4 +289,6 @@
         </section>
     </div>
 
+    <script src="<%= ResolveUrl("~/Scripts/home.js") %>"></script>
+    <script src="<%= ResolveUrl("~/Scripts/partners-carousel.js") %>?v=<%= System.IO.File.GetLastWriteTimeUtc(Server.MapPath("~/Scripts/partners-carousel.js")).Ticks %>"></script>
 </asp:Content>

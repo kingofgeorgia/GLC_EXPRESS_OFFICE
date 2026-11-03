@@ -49,6 +49,22 @@ namespace GLC_EXPRESS
             return PublicSiteLocalizationService.GetCurrentHtmlLanguage();
         }
 
+        protected string GetMileOnAutoCatalogUrl()
+        {
+            var language = GetCurrentHtmlLanguage();
+            if (Request != null && Request.Url != null && Request.Url.IsLoopback)
+            {
+                return "http://localhost:3000/" + language;
+            }
+
+            return "https://auto.glcexpress.com/" + language;
+        }
+
+        protected bool ShouldShowMileOnAutoInMenu()
+        {
+            return CurrentCrmSettings.ShowCalculatorInMenu;
+        }
+
         protected bool ShouldShowLanguageSwitcher()
         {
             return !IsCrmPage();
@@ -72,6 +88,16 @@ namespace GLC_EXPRESS
         protected string GetLoginUrl()
         {
             return PublicSiteLocalizationService.ApplyLanguageToUrl(ResolveUrl("~/Login"));
+        }
+
+        protected bool ShouldShowPublicRegistrationLink()
+        {
+            return !Request.IsAuthenticated && CrmSettingsService.IsPublicRegistrationEnabled();
+        }
+
+        protected string GetRegisterUrl()
+        {
+            return PublicSiteLocalizationService.ApplyLanguageToUrl(ResolveUrl("~/Register"));
         }
 
         protected string GetLogoutUrl()
@@ -171,14 +197,16 @@ namespace GLC_EXPRESS
             }
         }
 
-        private bool IsCrmPage()
+        protected bool IsCrmPage()
         {
             var currentPath = Request == null ? string.Empty : (Request.AppRelativeCurrentExecutionFilePath ?? string.Empty);
             return string.Equals(currentPath, "~/orders.aspx", StringComparison.OrdinalIgnoreCase)
-                || string.Equals(currentPath, "~/orders", StringComparison.OrdinalIgnoreCase);
+                || string.Equals(currentPath, "~/orders", StringComparison.OrdinalIgnoreCase)
+                || string.Equals(currentPath, "~/Operations.aspx", StringComparison.OrdinalIgnoreCase)
+                || string.Equals(currentPath, "~/Operations", StringComparison.OrdinalIgnoreCase);
         }
 
-        private bool IsHomePage()
+        protected bool IsHomePage()
         {
             var currentPath = Request == null ? string.Empty : (Request.AppRelativeCurrentExecutionFilePath ?? string.Empty);
             var absolutePath = Request != null && Request.Url != null ? Request.Url.AbsolutePath ?? string.Empty : string.Empty;

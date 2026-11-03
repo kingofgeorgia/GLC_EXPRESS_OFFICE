@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg"><defs>
+<symbol id="auction" viewBox="0 0 24 24"><path d="m14 3 7 7-3 3-7-7zM10 7l7 7M5 20l8-8M3 21h10M4 17l3 3"/></symbol>
+<symbol id="ship" viewBox="0 0 24 24"><path d="M3 14l9-3 9 3-3 6H6zM6 12V7h12v5M9 7V3h6v4M2 22q3-3 5 0 3-3 5 0 3-3 5 0 3-3 5 0M12 12v8"/></symbol>
+<symbol id="repair" viewBox="0 0 24 24"><path d="M21 3a6 6 0 0 1-8 8L5 21l-3-3 10-8a6 6 0 0 1 8-8l-4 4 3 3z"/></symbol>
+<symbol id="document" viewBox="0 0 24 24"><path d="M5 2h10l4 4v16H5zM14 2v5h5M8 11h8M8 15h8M8 19h5"/></symbol>
+<symbol id="container" viewBox="0 0 24 24"><path d="M2 6h20v16H2zM7 9v10M12 9v10M17 9v10M9 6V2h6v4"/></symbol>
+<symbol id="clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 5v8l5 3"/></symbol>
+<symbol id="support" viewBox="0 0 24 24"><path d="M3 16v-5a9 9 0 0 1 18 0v8h-7M3 11h4v8H3zM17 11h4v8h-4zM11 19h4v3h-4z"/></symbol>
+<symbol id="trophy" viewBox="0 0 24 24"><path d="M7 2h10v9a5 5 0 0 1-10 0zM7 5H2v4a5 5 0 0 0 5 5M17 5h5v4a5 5 0 0 1-5 5M12 16v6M7 22h10"/></symbol>
+<symbol id="search" viewBox="0 0 24 24"><circle cx="10" cy="10" r="7"/><path d="m15 15 7 7"/></symbol>
+<symbol id="truck" viewBox="0 0 24 24"><path d="M1 3h13v15H1zM14 9h5l4 5v4h-9M16 10v5h6"/><circle cx="6" cy="19" r="3"/><circle cx="18" cy="19" r="3"/></symbol>
+<symbol id="car" viewBox="0 0 24 24"><path d="m3 10 3-7h12l3 7v10h-3v-3H6v3H3zM3 10h18M6 14h3M15 14h3"/></symbol>
+<symbol id="check" viewBox="0 0 24 24"><path d="m4 12 5 5L21 5"/></symbol>
+</defs></svg>
